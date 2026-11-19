@@ -1,7 +1,9 @@
 import type { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
+import type { HighlightChanges } from '@navikt/klage-file-viewer/highlights';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import { getLogger } from '@/logger';
 import { BehandlingStatus } from '@/plugins/highlights/behandling-status';
+import { ChangeType, changesCounter, openStreamsGauge, streamRequestsCounter } from '@/plugins/highlights/metrics';
 import {
   BehandlingFinishedError,
   getClosedEvent,
@@ -14,6 +16,7 @@ import {
   HIGHLIGHT_EVENTS_PARAMS,
   HIGHLIGHTS_PARAMS,
   HIGHLIGHTS_QUERYSTRING,
+  type HighlightChangesBody,
 } from '@/plugins/highlights/types';
 import { registerOpenStream } from '@/shutdown';
 
@@ -61,7 +64,9 @@ export const registerHighlightRoutes = (
         }
 
         const { behandlingId } = req.params;
-        const check = await checkBehandling(repository, await getBehandlingStatus(req, behandlingId), behandlingId);
+        const status = await getBehandlingStatus(req, behandlingId);
+        streamRequestsCounter.inc({ status });
+        const check = await checkBehandling(repository, status, behandlingId);
 
         if (disconnected.signal.aborted) {
           return;
@@ -109,10 +114,12 @@ export const registerHighlightRoutes = (
         const heartbeat = setInterval(() => reply.raw.write(': heartbeat\n\n'), HEARTBEAT_INTERVAL_MS);
         // End the stream cleanly on shutdown. The client reconnects to another pod.
         const unregisterOpenStream = registerOpenStream(() => reply.raw.end());
+        openStreamsGauge.inc();
 
         disconnected.signal.addEventListener(
           'abort',
           () => {
+            openStreamsGauge.dec();
             unsubscribe();
             clearInterval(heartbeat);
             unregisterOpenStream();
@@ -153,7 +160,13 @@ export const registerHighlightRoutes = (
         }
 
         try {
-          return await repository.save({ navIdent, ...req.params, format: req.query.format }, req.body);
+          const { applied, coveredCount } = await repository.save(
+            { navIdent, ...req.params, format: req.query.format },
+            req.body,
+          );
+          countChanges(req.body, applied, coveredCount);
+
+          return applied;
         } catch (error) {
           if (error instanceof BehandlingFinishedError) {
             return reply.status(409).send(FINISHED_MESSAGE);
@@ -197,6 +210,22 @@ const markFinished = async (repository: HighlightRepository, behandlingId: strin
 
     return false;
   }
+};
+
+/**
+ * Counts requests, not net changes, so retries count again.
+ * - `removed`: requested removals, also of highlights that are already removed.
+ * - `rejected`: requested additions that weren't applied: invalid, duplicate, already stored, removed before or covered.
+ * - `covered`: stored highlights removed because a new highlight covers them.
+ */
+const countChanges = (requested: HighlightChangesBody, applied: HighlightChanges, coveredCount: number) => {
+  const requestedRemovedIds = new Set(requested.removedIds);
+  const removed = applied.removedIds.filter((id) => requestedRemovedIds.has(id)).length;
+
+  changesCounter.inc({ type: ChangeType.ADDED }, applied.added.length);
+  changesCounter.inc({ type: ChangeType.REMOVED }, removed);
+  changesCounter.inc({ type: ChangeType.REJECTED }, requested.added.length - applied.added.length);
+  changesCounter.inc({ type: ChangeType.COVERED }, coveredCount);
 };
 
 const formatEvent = ({ name, data }: HighlightServerEvent): string => `event: ${name}\ndata: ${data}\n\n`;

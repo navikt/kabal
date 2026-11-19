@@ -1,6 +1,8 @@
 import { afterEach, describe, expect, it, spyOn } from 'bun:test';
 import { type FastifyRequest, fastify } from 'fastify';
+import { waitFor } from '@/helpers/wait-for.test-utils';
 import { BehandlingStatus } from '@/plugins/highlights/behandling-status';
+import { changesCounter, openStreamsGauge } from '@/plugins/highlights/metrics';
 import { createMemoryHighlightRepository } from '@/plugins/highlights/repository';
 import { registerHighlightRoutes } from '@/plugins/highlights/routes';
 
@@ -101,6 +103,7 @@ describe('highlight routes', () => {
     const app = getApp();
     const port = await listen(app);
     const covering = { ...HIGHLIGHT, id: 'h2', rects: [{ x: 0.05, y: 0.09, width: 0.6, height: 0.04 }] };
+    const before = await getChangeCounts();
 
     await app.inject({ method: 'POST', url: URL, headers: Z1, payload: { added: [HIGHLIGHT], removedIds: [] } });
     const saved = await app.inject({
@@ -120,6 +123,44 @@ describe('highlight routes', () => {
     // Rejected additions are reported as removed, so the retrying viewer drops them.
     expect(retried.json()).toEqual({ added: [], removedIds: ['h1'] });
     expect(await readSnapshot(port, 'Z1')).toEqual([{ id: `${B1}/1`, format: 'ARKIV', highlights: [covering] }]);
+
+    const after = await getChangeCounts();
+    expect(after.added - before.added).toBe(2);
+    expect(after.removed - before.removed).toBe(0);
+    expect(after.covered - before.covered).toBe(1);
+    expect(after.rejected - before.rejected).toBe(1);
+  });
+
+  it('counts a stored highlight as covered when it is retried with a highlight that covers it', async () => {
+    const app = getApp();
+    const covering = { ...HIGHLIGHT, id: 'h2', rects: [{ x: 0.05, y: 0.09, width: 0.6, height: 0.04 }] };
+    await app.inject({ method: 'POST', url: URL, headers: Z1, payload: { added: [HIGHLIGHT], removedIds: [] } });
+    const before = await getChangeCounts();
+
+    const saved = await app.inject({
+      method: 'POST',
+      url: URL,
+      headers: Z1,
+      payload: { added: [HIGHLIGHT, covering], removedIds: [] },
+    });
+
+    expect(saved.json()).toEqual({ added: [covering], removedIds: ['h1'] });
+
+    const after = await getChangeCounts();
+    expect(after.covered - before.covered).toBe(1);
+    expect(after.rejected - before.rejected).toBe(1);
+  });
+
+  it('counts open streams until the client disconnects', async () => {
+    const app = getApp();
+    const port = await listen(app);
+    const before = await getOpenStreams();
+
+    const response = await connect(port, 'Z1');
+    expect(await getOpenStreams()).toBe(before + 1);
+
+    await response.body?.cancel();
+    await waitFor(async () => (await getOpenStreams()) === before);
   });
 
   it('accepts any number of changes within the body limit, and rejects larger bodies with 413', async () => {
@@ -278,6 +319,27 @@ describe('highlight routes', () => {
     ]);
   });
 });
+
+interface ChangeCounts {
+  added: number;
+  removed: number;
+  covered: number;
+  rejected: number;
+}
+
+const getChangeCounts = async (): Promise<ChangeCounts> => {
+  const { values } = await changesCounter.get();
+  const getCount = (type: string) => values.find(({ labels }) => labels.type === type)?.value ?? 0;
+
+  return {
+    added: getCount('added'),
+    removed: getCount('removed'),
+    covered: getCount('covered'),
+    rejected: getCount('rejected'),
+  };
+};
+
+const getOpenStreams = async (): Promise<number> => (await openStreamsGauge.get()).values[0]?.value ?? 0;
 
 /** Reads until the stream ends. */
 const ALL_EVENTS = Number.POSITIVE_INFINITY;

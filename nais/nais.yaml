@@ -44,6 +44,8 @@ spec:
   prometheus:
     enabled: true
     path: /metrics
+  # Enable leader election to prevent duplicate metrics fetching, calculation and reporting.
+  leaderElection: true
   accessPolicy:
     outbound:
       rules:

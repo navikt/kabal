@@ -8,6 +8,7 @@ import { createBehandlingFinishedConsumer } from '@/plugins/highlights/behandlin
 import { getBehandlingStatus } from '@/plugins/highlights/behandling-status';
 import { createMemoryHighlightRepository, createValkeyHighlightRepository } from '@/plugins/highlights/repository';
 import { registerHighlightRoutes } from '@/plugins/highlights/routes';
+import { type SnapshotMetrics, startSnapshotMetrics } from '@/plugins/highlights/snapshot-metrics';
 import { NAV_IDENT_PLUGIN_ID } from '@/plugins/nav-ident';
 import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@/plugins/obo-token';
 import { getHighlightsValkeyConfig } from '@/valkey/valkey-client';
@@ -35,13 +36,17 @@ export const highlightsPlugin = fastifyPlugin(
 
     const repository = createValkeyHighlightRepository(config);
     const consumer = createBehandlingFinishedConsumer(repository);
+    // Started when the server is ready, so a failed startup leaves nothing running.
+    let snapshotMetrics: SnapshotMetrics | null = null;
 
     registerHighlightRoutes(app, { repository, getNavIdent, getBehandlingStatus });
     app.addHook('onReady', async () => {
       consumer.connect();
+      snapshotMetrics = startSnapshotMetrics({ repository });
     });
     app.addHook('onClose', async () => {
-      await consumer.close();
+      // The Kafka consumer should not wait for a running scan.
+      await Promise.all([snapshotMetrics?.stop(), consumer.close()]);
       await repository.close();
     });
   },
