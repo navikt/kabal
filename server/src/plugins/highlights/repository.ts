@@ -4,7 +4,14 @@ import {
   type HighlightServerEventData,
   type HighlightServerEventName,
 } from '@navikt/klage-file-viewer/highlight-storage';
-import { applyHighlightChanges, type HighlightChanges, validateHighlights } from '@navikt/klage-file-viewer/highlights';
+import {
+  applyHighlightChanges,
+  type HighlightChanges,
+  type MarkerHighlight,
+  type MarkerHighlightSource,
+  validateHighlightChanges,
+  validateHighlights,
+} from '@navikt/klage-file-viewer/highlights';
 import { context, propagation } from '@opentelemetry/api';
 import { createClientPool, type RedisClientPoolType, WatchError } from 'redis';
 import { getHighlightsId } from '#shared/highlights';
@@ -27,7 +34,7 @@ export type HighlightEventSender = (event: HighlightServerEvent) => void;
 
 export interface HighlightRepository {
   /** Applies the changes atomically, tells the user's viewers on every pod, and returns the applied changes. */
-  save: (document: HighlightDocument, changes: unknown) => Promise<HighlightChanges>;
+  save: (document: HighlightDocument, changes: unknown) => Promise<SavedChanges>;
   /**
    * Sends `snapshot` with the user's highlights in the behandling, then the changes since, or only `closed`.
    * Sends nothing after `closed`. Calls `onError` when events can no longer be sent, and the client must reconnect.
@@ -43,7 +50,34 @@ export interface HighlightRepository {
    * Later saves are rejected, and viewers get `closed`. Safe to repeat.
    */
   deleteBehandling: (behandlingId: string) => Promise<void>;
+  /** Reads all stored highlights and finished markers. Slow, only for metrics. Rejects when `signal` aborts. */
+  scan: (signal?: AbortSignal) => Promise<HighlightScan>;
   close: () => Promise<void>;
+}
+
+export interface SavedChanges {
+  applied: HighlightChanges;
+  /** Stored highlights removed because a new highlight covers them. */
+  coveredCount: number;
+}
+
+/** What the metrics need from a highlight. Leaves out the text and rectangles, so a scan doesn't hold them. */
+export interface HighlightSummary {
+  source: MarkerHighlightSource;
+  textLength: number;
+  createdAt: number;
+}
+
+/** One user's stored highlights in one document variant. */
+export interface HighlightEntry extends HighlightDocument {
+  /** Empty when every highlight is removed and only the removed IDs are left. */
+  highlights: HighlightSummary[];
+}
+
+export interface HighlightScan {
+  entries: HighlightEntry[];
+  /** Behandlinger marked as finished. */
+  finishedMarkerCount: number;
 }
 
 /** Thrown when saving highlights for a finished behandling. */
@@ -76,14 +110,14 @@ export const createMemoryHighlightRepository = (): HighlightRepository => {
 
       const fields = behandlinger.get(document.behandlingId) ?? new Map<string, string>();
       const field = getField(document);
-      const { value, applied } = apply(fields.get(field) ?? null, changes, Date.now());
+      const { value, ...saved } = apply(fields.get(field) ?? null, changes, Date.now());
       behandlinger.set(document.behandlingId, fields.set(field, value));
 
-      for (const message of getChangeMessages(document, applied)) {
+      for (const message of getChangeMessages(document, saved.applied)) {
         publish(document.behandlingId, message);
       }
 
-      return applied;
+      return saved;
     },
     subscribe: (behandling, send) => {
       const fields = behandlinger.get(behandling.behandlingId) ?? new Map<string, string>();
@@ -97,6 +131,14 @@ export const createMemoryHighlightRepository = (): HighlightRepository => {
       finished.add(behandlingId);
       behandlinger.delete(behandlingId);
       publish(behandlingId, getClosedMessage());
+    },
+    scan: async (signal) => {
+      signal?.throwIfAborted();
+
+      return {
+        entries: Array.from(behandlinger, ([behandlingId, fields]) => getEntries(behandlingId, fields)).flat(),
+        finishedMarkerCount: finished.size,
+      };
     },
     close: async () => undefined,
   };
@@ -201,6 +243,13 @@ export const createValkeyHighlightRepository = (options: ValkeyOptions): Highlig
         .publish(getChannel(behandlingId), JSON.stringify(getClosedMessage()))
         .exec();
     },
+    scan: async (signal) => {
+      await ready;
+      // Fails before taking a pool connection if already stopped. `scanKeys` only checks after fetching each page.
+      signal?.throwIfAborted();
+
+      return pool.execute((client) => scanKeys(client, signal));
+    },
     close: async () => {
       await Promise.all([ready.catch(() => undefined), subscriberReady.catch(() => undefined)]);
       await Promise.all([pool.close(), subscriber.close()]);
@@ -216,7 +265,7 @@ const saveWithRetry = async (
   document: HighlightDocument,
   changes: unknown,
   attempt: number,
-): Promise<HighlightChanges> => {
+): Promise<SavedChanges> => {
   try {
     return await trySave(client, document, changes);
   } catch (error) {
@@ -230,11 +279,7 @@ const saveWithRetry = async (
   return saveWithRetry(client, document, changes, attempt + 1);
 };
 
-const trySave = async (
-  client: PoolClient,
-  document: HighlightDocument,
-  changes: unknown,
-): Promise<HighlightChanges> => {
+const trySave = async (client: PoolClient, document: HighlightDocument, changes: unknown): Promise<SavedChanges> => {
   const key = getKey(document.behandlingId);
   const finishedKey = getFinishedKey(document.behandlingId);
   const field = getField(document);
@@ -246,31 +291,99 @@ const trySave = async (
       throw new BehandlingFinishedError();
     }
 
-    const { value, applied } = apply(await client.hGet(key, field), changes, Date.now());
+    const { value, ...saved } = apply(await client.hGet(key, field), changes, Date.now());
     const transaction = client.multi().hSet(key, field, value);
 
-    for (const message of getChangeMessages(document, applied)) {
+    for (const message of getChangeMessages(document, saved.applied)) {
       transaction.publish(getChannel(document.behandlingId), JSON.stringify(message));
     }
 
     await transaction.exec();
 
-    return applied;
+    return saved;
   } finally {
     // The connection goes back to the pool. It must not keep watching if anything above threw.
     await client.unwatch();
   }
 };
 
-const getKey = (behandlingId: string): string => `highlights:${behandlingId}`;
+const KEY_PREFIX = 'highlights:';
+const FINISHED_KEY_PREFIX = 'highlights-finished:';
+/** Matches both prefixes. */
+const SCAN_PATTERN = 'highlights*';
+// Bounds the hashes read at once.
+const SCAN_COUNT = 100;
 
-const getFinishedKey = (behandlingId: string): string => `highlights-finished:${behandlingId}`;
+const getKey = (behandlingId: string): string => `${KEY_PREFIX}${behandlingId}`;
+
+const getFinishedKey = (behandlingId: string): string => `${FINISHED_KEY_PREFIX}${behandlingId}`;
 
 /** A Pub/Sub channel, not a key. */
 const getChannel = (behandlingId: string): string => `highlights-events:${behandlingId}`;
 
 /** A field in the behandling's hash. NAV-idents, document IDs and formats have no colons. */
 const getField = ({ navIdent, documentId, format }: HighlightDocument): string => `${navIdent}:${documentId}:${format}`;
+
+const parseField = (behandlingId: string, field: string): HighlightDocument | null => {
+  const [navIdent, documentId, format] = field.split(':');
+
+  if (navIdent === undefined || documentId === undefined || format === undefined || !isHighlightFormat(format)) {
+    return null;
+  }
+
+  return { behandlingId, navIdent, documentId, format };
+};
+
+/** Reads all highlight hashes and finished markers in one pass, page by page. Stops between pages when `signal` aborts. */
+const scanKeys = async (client: PoolClient, signal: AbortSignal | undefined): Promise<HighlightScan> => {
+  // `SCAN` may return a key more than once.
+  const highlightKeys = new Set<string>();
+  const finishedKeys = new Set<string>();
+  // Flattened once at the end. Spreading a large page into `push` could exceed the argument limit.
+  const pages: HighlightEntry[][][] = [];
+
+  for await (const keys of client.scanIterator({ MATCH: SCAN_PATTERN, COUNT: SCAN_COUNT })) {
+    signal?.throwIfAborted();
+
+    const unseen: string[] = [];
+
+    for (const key of keys) {
+      if (key.startsWith(FINISHED_KEY_PREFIX)) {
+        finishedKeys.add(key);
+      } else if (key.startsWith(KEY_PREFIX) && !highlightKeys.has(key)) {
+        highlightKeys.add(key);
+        unseen.push(key);
+      }
+    }
+
+    // Reads the page's hashes in parallel. node-redis sends all the commands on this one connection
+    // without waiting for each reply, so the whole page takes about one round trip instead of one per key.
+    pages.push(
+      await Promise.all(
+        unseen.map(async (key) => getEntries(key.slice(KEY_PREFIX.length), Object.entries(await client.hGetAll(key)))),
+      ),
+    );
+  }
+
+  return { entries: pages.flat(2), finishedMarkerCount: finishedKeys.size };
+};
+
+const getEntries = (behandlingId: string, fields: Iterable<[string, string]>): HighlightEntry[] =>
+  Array.from(fields, ([field, raw]) => {
+    const document = parseField(behandlingId, field);
+
+    if (document === null) {
+      return null;
+    }
+
+    return { ...document, highlights: validateHighlights(parseStored(raw).highlights).map(summarize) };
+  }).filter((entry) => entry !== null);
+
+const summarize = ({ source, text, createdAt }: MarkerHighlight): HighlightSummary => ({
+  source,
+  textLength: text.length,
+  createdAt,
+});
 
 /** Sends events until stopped. Stops after `closed`, since nothing may be sent after it. */
 const createSender = (send: HighlightEventSender) => {
@@ -321,15 +434,15 @@ const getSnapshotEvent = (
   fields: Map<string, string>,
 ): HighlightServerEvent => {
   const documents = Array.from(fields, ([field, raw]) => {
-    const [fieldNavIdent, documentId, format] = field.split(':');
+    const document = parseField(behandlingId, field);
 
-    if (fieldNavIdent !== navIdent || documentId === undefined || format === undefined || !isHighlightFormat(format)) {
+    if (document === null || document.navIdent !== navIdent) {
       return null;
     }
 
-    const id = getHighlightsId(behandlingId, documentId);
+    const id = getHighlightsId(behandlingId, document.documentId);
 
-    return { id, format, highlights: validateHighlights(parseStored(raw).highlights) };
+    return { id, format: document.format, highlights: validateHighlights(parseStored(raw).highlights) };
   });
 
   return toEvent('snapshot', { documents: documents.filter((document) => document !== null) });
@@ -383,15 +496,17 @@ interface StoredDocument {
   removed: Record<string, number>;
 }
 
-interface AppliedResult {
+interface AppliedResult extends SavedChanges {
   /** The serialized `StoredDocument` to save. */
   value: string;
-  applied: HighlightChanges;
 }
 
 const apply = (raw: string | null, changes: unknown, now: number): AppliedResult => {
   const stored = parseStored(raw);
   const result = applyHighlightChanges(stored.highlights, Object.keys(stored.removed), changes);
+  const storedIds = new Set(validateHighlights(stored.highlights).map(({ id }) => id));
+  const requestedIds = new Set(validateHighlightChanges(changes).removedIds);
+  const coveredCount = result.changes.removedIds.filter((id) => storedIds.has(id) && !requestedIds.has(id)).length;
   const removed = Object.fromEntries(
     result.removedIds
       .map((id): [string, number] => [id, stored.removed[id] ?? now])
@@ -399,7 +514,7 @@ const apply = (raw: string | null, changes: unknown, now: number): AppliedResult
   );
   const value: StoredDocument = { highlights: result.highlights, removed };
 
-  return { value: JSON.stringify(value), applied: result.changes };
+  return { value: JSON.stringify(value), applied: result.changes, coveredCount };
 };
 
 const parseStored = (raw: string | null): StoredDocument => {

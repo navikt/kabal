@@ -1,4 +1,5 @@
 import { type Static, Type } from '@fastify/type-provider-typebox';
+import type { MarkerHighlightSource } from '@navikt/klage-file-viewer/highlights';
 import { Value } from 'typebox/value';
 
 /**
@@ -21,6 +22,8 @@ export const HIGHLIGHT_CHANGES_BODY = Type.Object({
   removedIds: Type.Array(Type.String({ maxLength: 64 })),
 });
 
+export type HighlightChangesBody = Static<typeof HIGHLIGHT_CHANGES_BODY>;
+
 /** Larger requests get `413`, which the viewer shows as a permanent error. */
 export const HIGHLIGHT_CHANGES_BODY_LIMIT = 2 * 1024 * 1024; // 2 MB
 
@@ -35,5 +38,11 @@ export interface HighlightDocument extends HighlightBehandling, Static<typeof HI
 }
 
 export type HighlightFormat = Static<typeof FORMAT>;
+
+export const HIGHLIGHT_FORMATS: HighlightFormat[] = FORMAT.anyOf.map(({ const: format }) => format);
+
+// A record, so a new source fails to compile until it is added.
+const SOURCES: Record<MarkerHighlightSource, MarkerHighlightSource> = { pdf: 'pdf', ocr: 'ocr' };
+export const HIGHLIGHT_SOURCES = Object.values(SOURCES);
 
 export const isHighlightFormat = (value: string): value is HighlightFormat => Value.Check(FORMAT, value);

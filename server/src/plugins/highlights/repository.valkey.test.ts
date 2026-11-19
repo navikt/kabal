@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import { setTimeout } from 'node:timers/promises';
 import type { MarkerHighlight } from '@navikt/klage-file-viewer/highlights';
 import { optionalEnvString } from '@/config/env-var';
+import { waitFor } from '@/helpers/wait-for.test-utils';
 import {
   BehandlingFinishedError,
   createValkeyHighlightRepository,
@@ -59,14 +60,14 @@ describe.skipIf(url === undefined)('Valkey highlight repository', () => {
     const document = getDocument();
 
     expect(await a.save(document, { added: [getHighlight('h1'), getHighlight('h2')], removedIds: [] })).toEqual({
-      added: [getHighlight('h1'), getHighlight('h2')],
-      removedIds: [],
+      applied: { added: [getHighlight('h1'), getHighlight('h2')], removedIds: [] },
+      coveredCount: 0,
     });
     await a.save(document, { added: [], removedIds: ['h1'] });
 
     expect(await b.save(document, { added: [getHighlight('h1')], removedIds: [] })).toEqual({
-      added: [],
-      removedIds: ['h1'],
+      applied: { added: [], removedIds: ['h1'] },
+      coveredCount: 0,
     });
     expect(await readFirstEvent(b, document)).toEqual({
       name: 'snapshot',
@@ -75,6 +76,36 @@ describe.skipIf(url === undefined)('Valkey highlight repository', () => {
         traceparent: null,
       },
     });
+  });
+
+  it('scans the highlights of every user, and counts finished behandlinger', async () => {
+    const pod = createPod();
+    const document = getDocument();
+    const other: HighlightDocument = { ...getDocument(), behandlingId: document.behandlingId, format: 'SLADDET' };
+    const finished = getDocument();
+    await pod.save(document, { added: [getHighlight('h1'), getHighlight('h2')], removedIds: [] });
+    await pod.save(document, { added: [], removedIds: ['h1'] });
+    await pod.save(other, { added: [getHighlight('h3')], removedIds: [] });
+    const before = await pod.scan();
+    await pod.deleteBehandling(finished.behandlingId);
+
+    const { entries, finishedMarkerCount } = await pod.scan();
+
+    const summary = { source: 'pdf', textLength: 5, createdAt: 1 };
+
+    expect(entries.filter(({ behandlingId }) => behandlingId === document.behandlingId)).toEqual(
+      expect.arrayContaining([
+        { ...document, highlights: [summary] },
+        { ...other, highlights: [summary] },
+      ]),
+    );
+    expect(finishedMarkerCount).toBe(before.finishedMarkerCount + 1);
+  });
+
+  it('rejects a scan when the signal is aborted', async () => {
+    const pod = createPod();
+
+    await expect(pod.scan(AbortSignal.abort())).rejects.toThrow();
   });
 
   it('applies concurrent saves from several pods', async () => {
@@ -212,18 +243,6 @@ const subscribe = (
   const unsubscribe = repository.subscribe(behandling, (event) => events.push(event), onError);
 
   return { events, unsubscribe };
-};
-
-const waitFor = async (condition: () => boolean | Promise<boolean>, timeoutMs = 2_000): Promise<void> => {
-  const deadline = Date.now() + timeoutMs;
-
-  while (!(await condition())) {
-    if (Date.now() > deadline) {
-      throw new Error('Timed out');
-    }
-
-    await setTimeout(10);
-  }
 };
 
 interface ParsedEvent {

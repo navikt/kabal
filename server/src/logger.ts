@@ -47,7 +47,7 @@ export type LogArgs =
       data?: SerializableValue;
     };
 
-interface Logger {
+export interface Logger {
   debug: (args: LogArgs) => void;
   info: (args: LogArgs) => void;
   warn: (args: LogArgs) => void;

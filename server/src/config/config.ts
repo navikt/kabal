@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { isLocal, isTest } from '@/config/env';
-import { requiredEnvString } from '@/config/env-var';
+import { optionalEnvString, requiredEnvString } from '@/config/env-var';
 
 export enum ApiClientEnum {
   KABAL_API = 'kabal-api',
@@ -46,6 +46,8 @@ export const NAIS_CLUSTER_NAME = requiredEnvString('NAIS_CLUSTER_NAME', defaultV
 export const START_TIME = Date.now();
 export const NAIS_APP_NAME = requiredEnvString('NAIS_APP_NAME', defaultValue);
 export const NAIS_POD_NAME = requiredEnvString('NAIS_POD_NAME', isTest || isLocal ? '' : undefined);
+/** Set by Nais when `leaderElection` is enabled. */
+export const ELECTOR_GET_URL = optionalEnvString('ELECTOR_GET_URL');
 
 export const TEAM_LOG_PARAMS = {
   google_cloud_project: requiredEnvString('GOOGLE_CLOUD_PROJECT', isTest || isLocal ? '' : undefined),
