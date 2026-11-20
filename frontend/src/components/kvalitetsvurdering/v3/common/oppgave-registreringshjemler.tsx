@@ -14,12 +14,12 @@ interface SaksdatahjemlerProps {
 }
 
 export const OppgaveRegistreringshjemler = ({ field, parentKey }: SaksdatahjemlerProps) => {
-  const { hjemler, kvalitetsvurdering, update, isLoading } = useKvalitetsvurderingV3State();
+  const { hjemler, kvalitetsvurdering, update, isSuccess } = useKvalitetsvurderingV3State();
   const { data: registreringshjemlerMap, isLoading: registreringshjemlerMapIsLoading } = useRegistreringshjemlerMap();
   const canEdit = useCanEditBehandling();
   const validationError = useValidationError(field);
 
-  if (isLoading || registreringshjemlerMapIsLoading || typeof registreringshjemlerMap === 'undefined') {
+  if (!isSuccess || registreringshjemlerMapIsLoading || typeof registreringshjemlerMap === 'undefined') {
     return null;
   }
 
