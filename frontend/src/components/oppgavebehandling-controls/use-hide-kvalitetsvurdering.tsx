@@ -23,7 +23,10 @@ export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Sup
   const policy = getKvalitetsvurderingPolicy(typeId, resultat.utfallId);
 
   if (
+    !('kvalitetsvurderingReference' in oppgave) ||
     oppgave.kvalitetsvurderingReference === null ||
+    !('kantReference' in oppgave) ||
+    oppgave.kantReference === null ||
     oppgave.rol.employee?.navIdent === user.navIdent ||
     oppgave.feilregistrering !== null
   ) {

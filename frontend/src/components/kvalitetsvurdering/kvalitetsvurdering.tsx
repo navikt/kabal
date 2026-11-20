@@ -11,7 +11,12 @@ import { useFocusPanelShortcut } from '@/components/oppgavebehandling-panels/pan
 import { SECTION_TITLES, SectionKey } from '@/functions/error-type-guard';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useKvalitetsvurderingEnabled } from '@/hooks/settings/use-setting';
-import { type IOppgavebehandling, KvalitetsvurderingVersion } from '@/types/oppgavebehandling/oppgavebehandling';
+import {
+  type IOppgavebehandling,
+  KvalitetsvurderingVersion,
+  type WithKakaKvalitetsvurdering,
+  type WithKantKvalitetsvurdering,
+} from '@/types/oppgavebehandling/oppgavebehandling';
 
 export const Kvalitetsvurdering = (): React.JSX.Element | null => {
   const { data: oppgave } = useOppgave();
@@ -53,17 +58,24 @@ const Kvalitetsskjema = () => {
     return null;
   }
 
-  switch (data.kvalitetsvurderingReference?.version) {
-    case KvalitetsvurderingVersion.V1:
-      return <KvalitetsskjemaV1 />;
-    case KvalitetsvurderingVersion.V2:
-      return <KvalitetsskjemaV2 />;
-    case KvalitetsvurderingVersion.V3:
-      return <KvalitetsskjemaV3 />;
-    case KvalitetsvurderingVersion.ANKE_AFTER_2027:
-      return <KvalitetsskjemaAnkeAfter2027 />;
-    case KvalitetsvurderingVersion.ANKE_I_TRYGDERETTEN_AFTER_2027:
-      return <KvalitetsskjemaAnkeITRAfter2027 />;
+  if (isKakaKvalitetsvurdering(data)) {
+    switch (data.kvalitetsvurderingReference.version) {
+      case KvalitetsvurderingVersion.V1:
+        return <KvalitetsskjemaV1 />;
+      case KvalitetsvurderingVersion.V2:
+        return <KvalitetsskjemaV2 />;
+      case KvalitetsvurderingVersion.V3:
+        return <KvalitetsskjemaV3 />;
+    }
+  }
+
+  if (isKantKvalitetsvurdering(data)) {
+    switch (data.kantReference) {
+      case KvalitetsvurderingVersion.ANKE_AFTER_2027:
+        return <KvalitetsskjemaAnkeAfter2027 />;
+      case KvalitetsvurderingVersion.ANKE_I_TRYGDERETTEN_AFTER_2027:
+        return <KvalitetsskjemaAnkeITRAfter2027 />;
+    }
   }
 };
 
@@ -78,3 +90,13 @@ const ContentInner = ({ children }: { children: ReactElement }) => {
 
   return <div className="w-165 px-4 pb-4">{children}</div>;
 };
+
+const isKakaKvalitetsvurdering = (
+  oppgave: IOppgavebehandling,
+): oppgave is IOppgavebehandling & WithKakaKvalitetsvurdering =>
+  'kvalitetsvurderingReference' in oppgave && oppgave.kvalitetsvurderingReference !== null;
+
+const isKantKvalitetsvurdering = (
+  oppgave: IOppgavebehandling,
+): oppgave is IOppgavebehandling & WithKantKvalitetsvurdering =>
+  'kantReference' in oppgave && oppgave.kantReference !== null;

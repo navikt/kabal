@@ -103,7 +103,6 @@ export interface IOppgavebehandlingBase {
   klager: IPart;
   kommentarFraVedtaksinstans: string | null;
   gosysOppgaveId: number | null;
-  kvalitetsvurderingReference: KvalitetsvurderingReference | null;
   medunderskriver: IMedunderskriver;
   /** DateTime */
   modified: string;
@@ -151,26 +150,36 @@ export interface TilknyttetDokument {
   readonly dokumentInfoId: string;
 }
 
-export interface IKlagebehandling extends IOppgavebehandlingBase {
+export interface WithKakaKvalitetsvurdering {
+  kvalitetsvurderingReference: KvalitetsvurderingReference;
+}
+
+export interface WithKantKvalitetsvurdering {
+  kantReference: UUID | null;
+}
+
+export interface IKlagebehandling extends IOppgavebehandlingBase, WithKakaKvalitetsvurdering {
   typeId: SaksTypeEnum.KLAGE;
 }
 
-export interface IAnkebehandling extends IOppgavebehandlingBase {
+export interface IAnkebehandling extends IOppgavebehandlingBase, WithKakaKvalitetsvurdering {
   typeId: SaksTypeEnum.ANKE;
 }
 
-export interface IAnkeAfter2027Behandling extends IOppgavebehandlingBase {
+export interface IAnkeAfter2027Behandling extends IOppgavebehandlingBase, WithKantKvalitetsvurdering {
   typeId: SaksTypeEnum.ANKE_AFTER_2027;
   trygderettenSaksnummer: string | null;
 }
 
-export interface ITrygderettsankebehandling extends IOppgavebehandlingBase {
+export interface ITrygderettsankebehandling extends IOppgavebehandlingBase, WithKakaKvalitetsvurdering {
   typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN;
   kjennelseMottatt: string | null; // LocalDate
   sendtTilTrygderetten: string | null; // LocalDate
 }
 
-export interface IAnkeITRAfter2027Behandling extends Omit<ITrygderettsankebehandling, 'typeId'> {
+export interface IAnkeITRAfter2027Behandling
+  extends Omit<ITrygderettsankebehandling, 'typeId'>,
+    WithKantKvalitetsvurdering {
   typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027;
   trygderettenSaksnummer: string | null;
 }
