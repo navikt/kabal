@@ -2,6 +2,7 @@ import { BaseH1Plugin, BaseH2Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
 import { BaseParagraphPlugin } from 'platejs';
+import type { DistribusjonsType } from '#shared/documents';
 import { treatAsArena } from '@/domain/arena-case';
 import { FULLMEKTIG_LABEL_PLACEHOLDER, FULLMEKTIG_VALUE_PLACEHOLDER } from '@/plate/components/fullmektig';
 import {
@@ -55,7 +56,6 @@ import {
   type TableRowElement,
   TextAlign,
 } from '@/plate/types';
-import type { DistribusjonsType } from '@/types/documents/documents';
 import { SaksTypeEnum } from '@/types/kodeverk';
 import type { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 import { Language } from '@/types/texts/language';

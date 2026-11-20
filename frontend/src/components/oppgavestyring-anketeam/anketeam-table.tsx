@@ -69,7 +69,7 @@ export const LedigeAnkerTable = () => (
       ColumnKeyEnum.Deadline,
       ColumnKeyEnum.FlowStatesWithoutSelf,
       ColumnKeyEnum.Open,
-      ColumnKeyEnum.Oppgavestyring,
+      ColumnKeyEnum.OppgavestyringNonFilterable,
     ]}
     tableKey={OppgaveTableKey.ANKETEAM_LEDIGE}
     settingsKey={OppgaveTableRowsPerPage.ANKETEAM_LEDIGE}
