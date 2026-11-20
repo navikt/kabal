@@ -97,6 +97,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
   const collabConnectCount = useRef(0);
   const collabConnectMeasured = useRef(false);
   const collabSyncMeasured = useRef(false);
+  const initialSyncHandled = useRef(false);
   const documentCleanedOnce = useRef(false);
   const sessionCheckController = useRef<AbortController | null>(null);
   const reconnectAttempts = useRef(0);
@@ -246,6 +247,14 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
           }
 
           setIsSynced(true);
+
+          // Reconnects also trigger `onSynced`. A leading empty paragraph at that point is real content.
+          if (initialSyncHandled.current) {
+            return;
+          }
+
+          initialSyncHandled.current = true;
+
           // "Normalize" away empty paragraph that is automatically created between local initialization and Yjs connection.
           const first = editor.children[0];
           const second = editor.children[1];
