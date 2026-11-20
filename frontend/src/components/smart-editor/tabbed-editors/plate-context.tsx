@@ -53,8 +53,8 @@ const PlateContext = ({ smartDocument, oppgave, isConnected, isSynced }: PlateCo
   const { value: activeEditorId } = useSmartEditorActiveDocument();
   const isActive = id === activeEditorId;
   const dynamicContentLoadingCount = useDynamicContentLoadingCount();
-  const isDynamicContentLoading = useIsDynamicContentLoading(isSynced, dynamicContentLoadingCount);
-  const isReady = isSynced && !isDynamicContentLoading;
+  // Only block the editor on the initial load. Reconnects are shown in the status bar instead.
+  const isReady = useIsInitialLoadComplete(isSynced, dynamicContentLoadingCount);
 
   useTimingMeasurement('smart_editor_ready_ms', isReady);
 
@@ -167,13 +167,13 @@ const DynamicContentLoadingOverlay = () => (
 const GRACE_PERIOD_MS = 100;
 
 /**
- * Returns `true` while dynamic content is loading during the initial document load.
+ * Returns `true` once the initial document load is complete.
  *
- * The hook starts returning `true` when `isSynced` becomes true (dynamic components are mounting).
+ * The hook starts waiting when `isSynced` becomes true (dynamic components are mounting).
  * It waits for a grace period to let component effects register, then waits for
- * `loadingCount` to reach 0. Once it returns `false`, it stays `false` permanently (settled).
+ * `loadingCount` to reach 0. Once it returns `true`, it stays `true` permanently (settled), also across reconnects.
  */
-const useIsDynamicContentLoading = (isSynced: boolean, loadingCount: number): boolean => {
+const useIsInitialLoadComplete = (isSynced: boolean, loadingCount: number): boolean => {
   const [settled, setSettled] = useState(false);
   const settledRef = useRef(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -219,8 +219,7 @@ const useIsDynamicContentLoading = (isSynced: boolean, loadingCount: number): bo
     [],
   );
 
-  // Loading until settled, but only after sync has started.
-  return isSynced && !settled;
+  return settled;
 };
 
 const getFirstEditableTextStart = (editor: PlateEditor): Point | undefined => {
