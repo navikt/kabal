@@ -53,12 +53,13 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
   const name = sakenGjelder?.name ?? '';
   const heading = `${totalCount} andre pågående oppgaver for ${name} (${fnr})`;
   const tooltip = totalCount === 1 ? '1 annen pågående oppgave' : `${totalCount} andre pågående oppgaver`;
+  const hasOppgaver = totalCount > 0;
 
   return (
     <>
       <Tooltip content={tooltip}>
         <Button
-          data-color="neutral"
+          data-color={hasOppgaver ? 'danger' : 'neutral'}
           size={size}
           variant="tertiary"
           loading={isLoading}
@@ -66,7 +67,13 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
             pushEvent('open-relevant-oppgaver', 'oppgave-lists', { enabled: 'true' });
             setIsOpen(true);
           }}
-          icon={<FolderFileIcon aria-hidden />}
+          icon={
+            <FolderFileIcon
+              color={hasOppgaver ? 'var(--ax-text-danger-decoration)' : undefined}
+              className={hasOppgaver ? 'animate-wiggle animate-twice motion-reduce:animate-none' : undefined}
+              aria-hidden
+            />
+          }
         >
           {totalCount.toString(10)}
         </Button>
