@@ -12,7 +12,12 @@ export const useIsAnkeOrGbWithUtfallToTr = () => {
   const { typeId, resultat } = data;
   const { utfallId } = resultat;
 
-  if (typeId !== SaksTypeEnum.ANKE && typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK) {
+  if (
+    typeId !== SaksTypeEnum.ANKE &&
+    typeId !== SaksTypeEnum.ANKE_AFTER_2027 &&
+    typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK &&
+    typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027
+  ) {
     return false;
   }
 

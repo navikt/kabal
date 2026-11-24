@@ -29,7 +29,10 @@ export const useText = (): string => {
 
       return 'Du fullfører nå ankebehandlingen. Ankebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
     }
-    case SaksTypeEnum.ANKE_I_TRYGDERETTEN: {
+    case SaksTypeEnum.ANKE_AFTER_2027:
+      return 'Du fullfører nå ankebehandlingen. Ankebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027: {
       if (utfallId === UtfallEnum.HENVIST) {
         return 'Du har valgt «henvist» som resultat fra Trygderetten. Du fullfører nå registrering av resultatet. Når du trykker «Fullfør», vil Kabal opprette en ny ankeoppgave som du skal behandle. Vær oppmerksom på at det kan ta noen minutter før ankebehandlingen er opprettet.';
       }
@@ -44,7 +47,8 @@ export const useText = (): string => {
       return 'Du fullfører nå behandlingen. Behandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return 'Du fullfører nå behandlingen av omgjøringskravet. Behandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
-    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK: {
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027: {
       if (
         utfallId === UtfallEnum.INNSTILLING_GJENOPPTAS ||
         utfallId === UtfallEnum.INNSTILLING_IKKE_GJENOPPTAS ||
@@ -56,6 +60,7 @@ export const useText = (): string => {
       return 'Du fullfører nå behandlingen av begjæringen om gjenopptak. Behandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
     }
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027:
       if (utfallId === UtfallEnum.GJENOPPTATT_OPPHEVET) {
         return 'Du har valgt «opphevet» som resultat fra Trygderetten. Du fullfører nå registrering av resultatet. Skal klageinstansen behandle saken på nytt?';
       }

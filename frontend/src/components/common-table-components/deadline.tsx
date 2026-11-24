@@ -12,7 +12,10 @@ import { SaksTypeEnum } from '@/types/kodeverk';
 import type { IOppgave } from '@/types/oppgaver';
 
 export const Deadline = (oppgave: IOppgave) => {
-  if (oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+  if (
+    oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+    oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027
+  ) {
     return null;
   }
 

@@ -6,9 +6,11 @@ import { forlengetBehandlingstidApi } from '@/redux-api/forlenget-behandlingstid
 import { gosysOppgaverApi } from '@/redux-api/gosys-oppgaver';
 import { kabalInternalApi } from '@/redux-api/internal';
 import { journalposterApi } from '@/redux-api/journalposter';
-import { kvalitetsvurderingV1Api } from '@/redux-api/kaka-kvalitetsvurdering/v1';
-import { kvalitetsvurderingV2Api } from '@/redux-api/kaka-kvalitetsvurdering/v2';
-import { kvalitetsvurderingV3Api } from '@/redux-api/kaka-kvalitetsvurdering/v3';
+import { kvalitetsvurderingAnkeAfter2027Api } from '@/redux-api/kvalitetsvurdering/anke-after-2027';
+import { kvalitetsvurderingAnkeITRAfter2027Api } from '@/redux-api/kvalitetsvurdering/anke-i-tr-after-2027';
+import { kvalitetsvurderingV1Api } from '@/redux-api/kvalitetsvurdering/v1';
+import { kvalitetsvurderingV2Api } from '@/redux-api/kvalitetsvurdering/v2';
+import { kvalitetsvurderingV3Api } from '@/redux-api/kvalitetsvurdering/v3';
 import { logiskeVedleggApi } from '@/redux-api/logiske-vedlegg';
 import { consumerMaltekstseksjonerApi } from '@/redux-api/maltekstseksjoner/consumer';
 import { maltekstseksjonerApi } from '@/redux-api/maltekstseksjoner/maltekstseksjoner';
@@ -29,6 +31,8 @@ export const rootReducer = combineReducers({
   [kvalitetsvurderingV1Api.reducerPath]: kvalitetsvurderingV1Api.reducer,
   [kvalitetsvurderingV2Api.reducerPath]: kvalitetsvurderingV2Api.reducer,
   [kvalitetsvurderingV3Api.reducerPath]: kvalitetsvurderingV3Api.reducer,
+  [kvalitetsvurderingAnkeAfter2027Api.reducerPath]: kvalitetsvurderingAnkeAfter2027Api.reducer,
+  [kvalitetsvurderingAnkeITRAfter2027Api.reducerPath]: kvalitetsvurderingAnkeITRAfter2027Api.reducer,
   [kabalInternalApi.reducerPath]: kabalInternalApi.reducer,
   [smartEditorCommentsApi.reducerPath]: smartEditorCommentsApi.reducer,
   [textsApi.reducerPath]: textsApi.reducer,

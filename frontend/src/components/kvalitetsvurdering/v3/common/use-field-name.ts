@@ -12,7 +12,7 @@ import {
   TRYGDEMEDISIN_ERROR_LABELS,
   TRYGDEMEDISIN_LABELS,
 } from '@/components/kvalitetsvurdering/v3/trygdemedisin/data';
-import type { KvalitetsvurderingDataV3 } from '@/types/kaka-kvalitetsvurdering/v3';
+import type { KvalitetsvurderingDataV3 } from '@/types/kvalitetsvurdering/v3';
 
 type Keys = keyof KvalitetsvurderingDataV3;
 

@@ -6,7 +6,7 @@ import { useRegistreringshjemlerMap } from '@/simple-api-state/use-kodeverk';
 import type {
   KvalitetsvurderingSaksdataRegistreringshjemlerV3,
   KvalitetsvurderingV3Boolean,
-} from '@/types/kaka-kvalitetsvurdering/v3';
+} from '@/types/kvalitetsvurdering/v3';
 
 interface SaksdatahjemlerProps {
   field: keyof KvalitetsvurderingSaksdataRegistreringshjemlerV3;
@@ -14,12 +14,12 @@ interface SaksdatahjemlerProps {
 }
 
 export const OppgaveRegistreringshjemler = ({ field, parentKey }: SaksdatahjemlerProps) => {
-  const { hjemler, kvalitetsvurdering, update, isLoading } = useKvalitetsvurderingV3State();
+  const { hjemler, kvalitetsvurdering, update, isSuccess } = useKvalitetsvurderingV3State();
   const { data: registreringshjemlerMap, isLoading: registreringshjemlerMapIsLoading } = useRegistreringshjemlerMap();
   const canEdit = useCanEditBehandling();
   const validationError = useValidationError(field);
 
-  if (isLoading || registreringshjemlerMapIsLoading || typeof registreringshjemlerMap === 'undefined') {
+  if (!isSuccess || registreringshjemlerMapIsLoading || typeof registreringshjemlerMap === 'undefined') {
     return null;
   }
 

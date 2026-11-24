@@ -6,7 +6,7 @@ import type {
   IKvalitetsvurderingRadioExtended,
   IKvalitetsvurderingTexts,
   IKvalitetsvurderingV1,
-} from '@/types/kaka-kvalitetsvurdering/v1';
+} from '@/types/kvalitetsvurdering/v1';
 
 type WithId = Pick<IKvalitetsvurderingV1, 'id'>;
 

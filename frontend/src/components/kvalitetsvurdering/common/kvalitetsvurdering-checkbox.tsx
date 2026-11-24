@@ -1,8 +1,8 @@
 import { Checkbox, type CheckboxProps, HelpText, Radio, type RadioProps } from '@navikt/ds-react';
 import type { ReactElement } from 'react';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
-import type { IKvalitetsvurderingBooleans } from '@/types/kaka-kvalitetsvurdering/v2';
-import type { KvalitetsvurderingV3Boolean } from '@/types/kaka-kvalitetsvurdering/v3';
+import type { IKvalitetsvurderingBooleans } from '@/types/kvalitetsvurdering/v2';
+import type { KvalitetsvurderingV3Boolean } from '@/types/kvalitetsvurdering/v3';
 
 export const HelpTextRadio = ({ children, helpText, ...props }: RadioProps & { helpText?: string }) => (
   <Radio size="small" className="[&_.aksel-help-text]:inline-flex [&_.aksel-help-text]:align-middle" {...props}>

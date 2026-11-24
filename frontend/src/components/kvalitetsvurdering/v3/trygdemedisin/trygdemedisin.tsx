@@ -15,16 +15,16 @@ import {
 import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { useCanEditBehandling } from '@/hooks/use-can-edit';
 import { useIsRelevantYtelseForRaadgivende } from '@/hooks/use-is-relevant-ytelse-for-raadgivende';
-import { RadiovalgExtended } from '@/types/kaka-kvalitetsvurdering/radio';
+import { RadiovalgExtended } from '@/types/kvalitetsvurdering/radio';
 
 export const Trygdemedisin = () => {
-  const { isLoading, kvalitetsvurdering, update, oppgave } = useKvalitetsvurderingV3State();
+  const { isSuccess, kvalitetsvurdering, update, oppgave } = useKvalitetsvurderingV3State();
   const show = useIsRelevantYtelseForRaadgivende(oppgave?.ytelseId ?? null);
 
   const canEdit = useCanEditBehandling();
   const validationError = useValidationError(MainReason.Trygdemedisin);
 
-  if (!show || isLoading) {
+  if (!show || !isSuccess) {
     return null;
   }
 

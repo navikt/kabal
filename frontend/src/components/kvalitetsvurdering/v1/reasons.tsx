@@ -4,8 +4,8 @@ import { CommentField } from '@/components/kvalitetsvurdering/v1/comment-field';
 import { StyledHelpText } from '@/components/kvalitetsvurdering/v1/styled-components';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { useKvalitetsvurderingV1 } from '@/hooks/use-kvalitetsvurdering';
-import { useUpdateKvalitetsvurderingMutation } from '@/redux-api/kaka-kvalitetsvurdering/v1';
-import type { IKvalitetsvurderingBooleans, IKvalitetsvurderingTexts } from '@/types/kaka-kvalitetsvurdering/v1';
+import { useUpdateKvalitetsvurderingMutation } from '@/redux-api/kvalitetsvurdering/v1';
+import type { IKvalitetsvurderingBooleans, IKvalitetsvurderingTexts } from '@/types/kvalitetsvurdering/v1';
 
 export interface Reason {
   id: keyof IKvalitetsvurderingBooleans;

@@ -2,8 +2,8 @@ import { Textarea } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { useKvalitetsvurderingV1 } from '@/hooks/use-kvalitetsvurdering';
-import { useUpdateKvalitetsvurderingMutation } from '@/redux-api/kaka-kvalitetsvurdering/v1';
-import type { IKvalitetsvurderingTexts, IKvalitetsvurderingV1 } from '@/types/kaka-kvalitetsvurdering/v1';
+import { useUpdateKvalitetsvurderingMutation } from '@/redux-api/kvalitetsvurdering/v1';
+import type { IKvalitetsvurderingTexts, IKvalitetsvurderingV1 } from '@/types/kvalitetsvurdering/v1';
 
 interface Props {
   textareaId: keyof IKvalitetsvurderingTexts;

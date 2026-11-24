@@ -19,10 +19,10 @@ import { Fullmektig } from '@/components/part/fullmektig/fullmektig';
 import { Type } from '@/components/type/type';
 import { useUpdateKlagerMutation } from '@/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum } from '@/types/kodeverk';
-import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
+import type { IBegjæringOmGjenopptakBehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
-  oppgavebehandling: IOppgavebehandling;
+  oppgavebehandling: IBegjæringOmGjenopptakBehandling;
 }
 
 export const BegjæringOmGjenopptakDetaljer = ({ oppgavebehandling }: Props) => {

@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react';
 import { ValidationErrorContext } from '@/components/kvalitetsvurdering/validation-error-context';
-import type { IKvalitetsvurderingV1 } from '@/types/kaka-kvalitetsvurdering/v1';
+import type { IKvalitetsvurderingV1 } from '@/types/kvalitetsvurdering/v1';
 import type { IOppgavebehandlingBase, ITrygderettsankebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 type Field =

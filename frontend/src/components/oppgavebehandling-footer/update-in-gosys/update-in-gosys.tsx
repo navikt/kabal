@@ -1,7 +1,7 @@
 import { BodyLong, BodyShort, Button, Checkbox, Dialog, Heading, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { format } from 'date-fns';
-import { useContext, useState } from 'react';
+import { Fragment, useContext, useState } from 'react';
 import { FORMAT, PRETTY_FORMAT } from '@/components/date-picker/constants';
 import { GrafanaDomainProvider } from '@/components/grafana-domain-context/grafana-domain-context';
 import { InfoBox } from '@/components/info-box/info-box';
@@ -22,6 +22,7 @@ import { useGetGosysOppgaveQuery } from '@/redux-api/oppgaver/queries/behandling
 import { useSearchEnheterQuery } from '@/redux-api/search';
 import { useUtfall } from '@/simple-api-state/use-kodeverk';
 import { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
+import { getKvalitetsvurderingId } from '@/types/kvalitetsvurdering/common';
 import {
   type BehandlingGosysOppgave,
   type Enhet,
@@ -86,7 +87,7 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
 
   const handleFinish = async () => {
     try {
-      const kvalitetsvurderingId = oppgavebehandling.kvalitetsvurderingReference?.id ?? null;
+      const kvalitetsvurderingId = getKvalitetsvurderingId(oppgavebehandling);
       const oppgaveId = oppgavebehandling.id;
 
       const base = { kvalitetsvurderingId, oppgaveId };
@@ -311,11 +312,13 @@ const UpdateInGosysWarning = ({
 }: {
   oppgavebehandling: IOppgavebehandling;
 }) => {
-  if (typeId !== SaksTypeEnum.ANKE) {
-    return null;
-  }
+  const map = SAKSTYPE_TO_UTFALL_MAP[typeId] ?? [];
 
-  if (utfallId !== UtfallEnum.DELVIS_MEDHOLD && !extraUtfallIdSet.includes(UtfallEnum.DELVIS_MEDHOLD)) {
+  const uniqueUtfall = [...new Set([utfallId, ...extraUtfallIdSet])];
+
+  const utfallMatches = uniqueUtfall.filter((u): u is UtfallEnum => u !== null && map.includes(u));
+
+  if (utfallMatches.length === 0) {
     return null;
   }
 
@@ -327,8 +330,34 @@ const UpdateInGosysWarning = ({
 
       <BodyLong size="small">
         <strong>VIKTIG</strong>: Du må også opprette en ny oppgave i Gosys og sende den til vedtaksenheten, med
-        informasjon om at de kan effektuere utfallet <UtfallTag utfallId={UtfallEnum.DELVIS_MEDHOLD} />.
+        informasjon om at de kan effektuere {utfallMatches.length === 1 ? 'utfallet' : 'utfallene'}{' '}
+        <UtfallTags utfallIds={utfallMatches} />.
       </BodyLong>
     </InfoBox>
   );
 };
+
+const SAKSTYPE_TO_UTFALL_MAP: Partial<Record<SaksTypeEnum, UtfallEnum[]>> = {
+  [SaksTypeEnum.ANKE]: [UtfallEnum.DELVIS_MEDHOLD],
+  [SaksTypeEnum.ANKE_AFTER_2027]: [
+    UtfallEnum.DELVIS_MEDHOLD,
+    UtfallEnum.MEDHOLD,
+    UtfallEnum.OPPHEVET,
+    UtfallEnum.UGUNST,
+  ],
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027]: [UtfallEnum.MEDHOLD_ETTER_FORVALTNINGSLOVEN_35, UtfallEnum.UGUNST],
+};
+
+const UtfallTags = ({ utfallIds }: { utfallIds: UtfallEnum[] }) =>
+  utfallIds.map((utfallId, i) => {
+    if (i === 0) {
+      return <UtfallTag key={utfallId} utfallId={utfallId} />;
+    }
+
+    return (
+      <Fragment key={utfallId}>
+        {i === utfallIds.length - 1 ? ' og ' : ', '}
+        <UtfallTag utfallId={utfallId} />
+      </Fragment>
+    );
+  });

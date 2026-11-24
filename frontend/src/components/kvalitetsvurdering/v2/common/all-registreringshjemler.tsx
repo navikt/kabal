@@ -5,7 +5,7 @@ import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import type {
   IKvalitetsvurderingAllRegistreringshjemler,
   IKvalitetsvurderingBooleans,
-} from '@/types/kaka-kvalitetsvurdering/v2';
+} from '@/types/kvalitetsvurdering/v2';
 
 const EMPTY_ARRAY: string[] = [];
 

@@ -6,9 +6,9 @@ import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { useKvalitetsvurderingV1 } from '@/hooks/use-kvalitetsvurdering';
 import { useValidationError } from '@/hooks/use-validation-error';
-import { useUpdateKvalitetsvurderingMutation } from '@/redux-api/kaka-kvalitetsvurdering/v1';
-import { Radiovalg } from '@/types/kaka-kvalitetsvurdering/radio';
+import { useUpdateKvalitetsvurderingMutation } from '@/redux-api/kvalitetsvurdering/v1';
 import { SaksTypeEnum } from '@/types/kodeverk';
+import { Radiovalg } from '@/types/kvalitetsvurdering/radio';
 
 export const Klageforberedelsen = () => {
   const [kvalitetsvurdering, isLoading] = useKvalitetsvurderingV1();

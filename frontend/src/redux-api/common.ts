@@ -119,6 +119,7 @@ export const KLAGE_LOOKUP_PATH = '/api/klage-lookup';
 export const KABAL_BEHANDLINGER_BASE_QUERY = staggeredBaseQuery(KABAL_BEHANDLINGER_BASE_PATH);
 export const KABAL_INTERNAL_BASE_QUERY = staggeredBaseQuery('/api');
 export const INNSTILLINGER_BASE_QUERY = staggeredBaseQuery(INNSTILLINGER_BASE_PATH);
+export const KANT_BASE_QUERY = staggeredBaseQuery('/api/kant-api/api/saksdata');
 export const KAKA_KVALITETSVURDERING_BASE_QUERY = staggeredBaseQuery('/api/kaka-api/kvalitetsvurderinger');
 export const KABAL_TEXT_TEMPLATES_BASE_QUERY = staggeredBaseQuery('/api/kabal-text-templates');
 export const KABAL_API_BASE_QUERY = staggeredBaseQuery(KABAL_API_BASE_PATH);

@@ -101,7 +101,6 @@ export interface IOppgavebehandlingBase {
   klager: IPart;
   kommentarFraVedtaksinstans: string | null;
   gosysOppgaveId: number | null;
-  kvalitetsvurderingReference: KvalitetsvurderingReference | null;
   medunderskriver: IMedunderskriver;
   /** DateTime */
   modified: string;
@@ -149,18 +148,38 @@ export interface TilknyttetDokument {
   readonly dokumentInfoId: string;
 }
 
-export interface IKlagebehandling extends IOppgavebehandlingBase {
+export interface WithKakaKvalitetsvurdering {
+  kvalitetsvurderingReference: KvalitetsvurderingReference;
+}
+
+export interface WithKantKvalitetsvurdering {
+  kantReference: UUID | null;
+}
+
+export interface IKlagebehandling extends IOppgavebehandlingBase, WithKakaKvalitetsvurdering {
   typeId: SaksTypeEnum.KLAGE;
 }
 
-export interface IAnkebehandling extends IOppgavebehandlingBase {
+export interface IAnkebehandling extends IOppgavebehandlingBase, WithKakaKvalitetsvurdering {
   typeId: SaksTypeEnum.ANKE;
 }
 
-export interface ITrygderettsankebehandling extends IOppgavebehandlingBase {
+export interface IAnkeAfter2027Behandling extends IOppgavebehandlingBase, WithKantKvalitetsvurdering {
+  typeId: SaksTypeEnum.ANKE_AFTER_2027;
+  trygderettenSaksnummer: string | null;
+}
+
+export interface ITrygderettsankebehandling extends IOppgavebehandlingBase, WithKantKvalitetsvurdering {
   typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN;
   kjennelseMottatt: string | null; // LocalDate
   sendtTilTrygderetten: string | null; // LocalDate
+}
+
+export interface IAnkeITRAfter2027Behandling
+  extends Omit<ITrygderettsankebehandling, 'typeId'>,
+    WithKantKvalitetsvurdering {
+  typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027;
+  trygderettenSaksnummer: string | null;
 }
 
 export interface IBehandlingEtterTryderettenOpphevet extends IOppgavebehandlingBase {
@@ -182,6 +201,21 @@ export interface IBegjæringOmGjenopptakITRBehandling extends IOppgavebehandling
   typeId: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
 }
 
+export interface IBegjæringOmGjenopptakITRAfter2027Behandling extends IOppgavebehandlingBase {
+  typeId: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027;
+  kjennelseMottatt: string | null; // LocalDate
+  sendtTilTrygderetten: string | null; // LocalDate
+  trygderettenSaksnummer: string | null;
+}
+
+export interface IBegjæringOmGjenopptakAfter2027Behandling extends IOppgavebehandlingBase {
+  typeId: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027;
+  trygderettenSaksnummer: string | null;
+}
+
+export type KantBehandling = IAnkeAfter2027Behandling | IAnkeITRAfter2027Behandling | ITrygderettsankebehandling;
+export type KakaBehandling = IKlagebehandling | IAnkebehandling;
+
 export type IOppgavebehandling =
   | IKlagebehandling
   | IAnkebehandling
@@ -189,7 +223,11 @@ export type IOppgavebehandling =
   | IBehandlingEtterTryderettenOpphevet
   | IOmgjøringskravbehandling
   | IBegjæringOmGjenopptakBehandling
-  | IBegjæringOmGjenopptakITRBehandling;
+  | IBegjæringOmGjenopptakITRBehandling
+  | IAnkeAfter2027Behandling
+  | IAnkeITRAfter2027Behandling
+  | IBegjæringOmGjenopptakAfter2027Behandling
+  | IBegjæringOmGjenopptakITRAfter2027Behandling;
 
 interface Resultat {
   file: IVedlegg | null;

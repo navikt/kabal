@@ -3,8 +3,8 @@ import { type Reason, Reasons } from '@/components/kvalitetsvurdering/v1/reasons
 import { FormSection } from '@/components/kvalitetsvurdering/v1/styled-components';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useKvalitetsvurderingV1 } from '@/hooks/use-kvalitetsvurdering';
-import { Radiovalg } from '@/types/kaka-kvalitetsvurdering/radio';
 import { SaksTypeEnum } from '@/types/kodeverk';
+import { Radiovalg } from '@/types/kvalitetsvurdering/radio';
 
 export const Annet = () => {
   const { data: oppgave } = useOppgave();

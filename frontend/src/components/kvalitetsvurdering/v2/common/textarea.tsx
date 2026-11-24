@@ -5,7 +5,7 @@ import type { TextParams } from '@/components/kvalitetsvurdering/v2/common/types
 import { useKvalitetsvurderingV2State } from '@/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
 import { SavedStatus } from '@/components/saved-status/saved-status';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
-import type { IKvalitetsvurderingBooleans } from '@/types/kaka-kvalitetsvurdering/v2';
+import type { IKvalitetsvurderingBooleans } from '@/types/kvalitetsvurdering/v2';
 
 interface Props extends TextParams {
   parentKey?: keyof IKvalitetsvurderingBooleans;

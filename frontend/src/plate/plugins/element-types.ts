@@ -12,6 +12,7 @@ export const ELEMENT_SIGNATURE = 'signature';
 export const ELEMENT_EMPTY_VOID = 'empty-void';
 export const ELEMENT_SAKSNUMMER = 'saksnummer';
 export const ELEMENT_ARENA_SAKSNUMMER = 'arena-saksnummer';
+export const ELEMENT_SAKSNUMMER_HOS_TR = 'saksnummer-hos-tr';
 export const ELEMENT_SAKSINFO = 'saksinfo';
 
 export const ELEMENT_BOOKMARK = 'bookmark';
@@ -26,6 +27,7 @@ export const UNCHANGEABLE = [
   ELEMENT_FULLMEKTIG,
   ELEMENT_SAKSNUMMER,
   ELEMENT_ARENA_SAKSNUMMER,
+  ELEMENT_SAKSNUMMER_HOS_TR,
   ELEMENT_SAKSINFO,
 ];
 

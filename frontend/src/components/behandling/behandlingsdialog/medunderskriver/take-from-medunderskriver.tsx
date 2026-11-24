@@ -1,19 +1,16 @@
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { getTitleLowercase } from '@/components/behandling/behandlingsdialog/medunderskriver/get-title';
 import { getFixedCacheKey } from '@/components/behandling/behandlingsdialog/medunderskriver/helpers';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { useSetMedunderskriverFlowStateMutation } from '@/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
-import type { SaksTypeEnum } from '@/types/kodeverk';
 import { FlowState, type IMedunderskriver } from '@/types/oppgave-common';
 
 interface Props {
   oppgaveId: string;
   medunderskriver: IMedunderskriver;
-  typeId: SaksTypeEnum;
 }
 
-export const TakeFromMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: Props) => {
+export const TakeFromMedunderskriver = ({ oppgaveId, medunderskriver }: Props) => {
   const isSaksbehandler = useIsTildeltSaksbehandler();
   const [setMedunderskriverFlowState, { isLoading }] = useSetMedunderskriverFlowStateMutation({
     fixedCacheKey: getFixedCacheKey(oppgaveId),
@@ -32,7 +29,7 @@ export const TakeFromMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: 
       data-color="neutral"
       onClick={() => setMedunderskriverFlowState({ oppgaveId, flowState: FlowState.NOT_SENT })}
     >
-      Hent tilbake fra {getTitleLowercase(typeId)}
+      Hent tilbake fra medunderskriver
     </Button>
   );
 };

@@ -3,6 +3,7 @@ import { StaticDataContext } from '@/components/app/static-data-context';
 import { Type } from '@/components/type/type';
 import { UtfallTag } from '@/components/utfall-tag/utfall-tag';
 import { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
+import { isKakaKvalitetsvurdering, isKantKvalitetsvurdering } from '@/types/kvalitetsvurdering/common';
 import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 type Supported =
@@ -10,12 +11,27 @@ type Supported =
   | { featureEnabled: true; panelDefaultEnabled: boolean; reason: ReactElement } // Kvalitetsvurdering not supported with reason
   | { featureEnabled: false; panelDefaultEnabled: false; reason: null }; // Completely hide kvalitetsvurdering - don't even show reason
 
+enum Policy {
+  REQUIRED = 'REQUIRED',
+  NOT_REQUIRED_FOR_SAKSTYPE = 'NOT_REQUIRED_FOR_SAKSTYPE',
+  NOT_REQUIRED_FOR_UTFALL = 'NOT_REQUIRED_FOR_UTFALL',
+}
+
 export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Supported => {
   const { user } = useContext(StaticDataContext);
 
   const { typeId, resultat } = oppgave;
+  const policy = getKvalitetsvurderingPolicy(typeId, resultat.utfallId);
 
-  if (!typeHasKvalitetsvurdering(typeId)) {
+  if (
+    (!isKakaKvalitetsvurdering(oppgave) && !isKantKvalitetsvurdering(oppgave)) ||
+    oppgave.rol.employee?.navIdent === user.navIdent ||
+    oppgave.feilregistrering !== null
+  ) {
+    return { featureEnabled: false, panelDefaultEnabled: false, reason: null };
+  }
+
+  if (policy === Policy.NOT_REQUIRED_FOR_SAKSTYPE) {
     return {
       featureEnabled: true,
       panelDefaultEnabled: false,
@@ -27,7 +43,7 @@ export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Sup
     };
   }
 
-  if (!utfallHasKvalitetsvurdering(resultat.utfallId)) {
+  if (policy === Policy.NOT_REQUIRED_FOR_UTFALL) {
     return {
       featureEnabled: true,
       panelDefaultEnabled: true,
@@ -39,23 +55,29 @@ export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Sup
     };
   }
 
-  if (
-    oppgave.kvalitetsvurderingReference === null ||
-    oppgave.rol.employee?.navIdent === user.navIdent ||
-    oppgave.feilregistrering !== null
-  ) {
-    return { featureEnabled: false, panelDefaultEnabled: false, reason: null };
-  }
-
   return { panelDefaultEnabled: true, featureEnabled: true, reason: null };
 };
 
-export const typeHasKvalitetsvurdering = (typeId: SaksTypeEnum): boolean =>
-  typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN &&
-  typeId !== SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET &&
-  typeId !== SaksTypeEnum.OMGJØRINGSKRAV &&
-  typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK &&
-  typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
+export const hasKvalitetsvurdering = (typeId: SaksTypeEnum, utfallId: UtfallEnum | null): boolean =>
+  getKvalitetsvurderingPolicy(typeId, utfallId) === Policy.REQUIRED;
 
-export const utfallHasKvalitetsvurdering = (utfallId: UtfallEnum | null): boolean =>
-  utfallId !== UtfallEnum.TRUKKET && utfallId !== UtfallEnum.RETUR && utfallId !== UtfallEnum.HENLAGT;
+const getKvalitetsvurderingPolicy = (typeId: SaksTypeEnum, utfallId: UtfallEnum | null): Policy => {
+  switch (typeId) {
+    case SaksTypeEnum.ANKE_AFTER_2027:
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+      return Policy.REQUIRED;
+    case SaksTypeEnum.KLAGE:
+    case SaksTypeEnum.ANKE:
+      return utfallId === UtfallEnum.TRUKKET || utfallId === UtfallEnum.RETUR || utfallId === UtfallEnum.HENLAGT
+        ? Policy.NOT_REQUIRED_FOR_UTFALL
+        : Policy.REQUIRED;
+    case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
+    case SaksTypeEnum.OMGJØRINGSKRAV:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027:
+      return Policy.NOT_REQUIRED_FOR_SAKSTYPE;
+  }
+};
