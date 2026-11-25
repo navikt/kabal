@@ -1,6 +1,6 @@
 export enum KantKvalitetsvurdering {
   ANKE_V1 = 'ANKE_V1',
-  ANKE_ITR_V1 = 'ANKE_ITR_AFTER_2027',
+  ANKE_ITR_V1 = 'ANKE_ITR_V1',
 }
 
 export const REGISTRERINGSHJEMLER = 'registreringshjemler';

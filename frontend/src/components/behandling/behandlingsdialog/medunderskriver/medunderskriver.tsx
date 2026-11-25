@@ -60,12 +60,7 @@ export const Medunderskriver = () => {
     <PartBox>
       {label}
       <ArenaInfoSaksbehandler typeId={typeId} />
-      <SelectMedunderskriver
-        id={oppgaveId}
-        medunderskriver={oppgave.medunderskriver}
-        utfallId={oppgave.resultat.utfallId}
-        typeId={typeId}
-      />
+      <SelectMedunderskriver behandling={oppgave} />
       <MedunderskriverStateText medunderskriver={medunderskriver} />
 
       <SendToMedunderskriver oppgaveId={oppgaveId} medunderskriver={medunderskriver} />

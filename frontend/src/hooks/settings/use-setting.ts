@@ -171,7 +171,6 @@ export enum OppgaveTableRowsPerPage {
   ANKETEAM_LEDIGE = 'oppgaver/anketeam_ledige/rows_per_page',
   ANKETEAM_TILDELTE = 'oppgaver/anketeam_tildelte/rows_per_page',
   ANKETEAM_VENTENDE = 'oppgaver/anketeam_paa_vent/rows_per_page',
-  ANKETEAM_FERDIGE = 'oppgaver/anketeam_ferdige/rows_per_page',
 }
 
 export const useGosysBeskrivelseTab = () => useSetting('oppgavebehandling/gosys/beskrivelse/tab');

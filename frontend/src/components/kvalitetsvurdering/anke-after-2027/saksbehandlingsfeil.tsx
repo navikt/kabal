@@ -7,7 +7,7 @@ import {
 import { useKvalitetsvurderingAnkeAfter2027State } from '@/components/kvalitetsvurdering/anke-after-2027/hooks';
 import { HelpTextCheckBox } from '@/components/kvalitetsvurdering/common/kvalitetsvurdering-checkbox';
 import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
-import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { useCanEditBehandling } from '@/hooks/use-can-edit';
 import { SaksbehandlingsfeilField, Section } from '@/types/kvalitetsvurdering/anke-after-2027';
 
 const SAKSBEHANDLINGSFEIL_HEADER = SECTION_LABELS[Section.SaksbehandlingsfeilIKlageomgangen];
@@ -15,7 +15,7 @@ const SAKSBEHANDLINGSFEIL_FIELDS = Object.values(SaksbehandlingsfeilField);
 
 export const Saksbehandlingsfeil = () => {
   const { isSuccess, kvalitetsvurdering, update } = useKvalitetsvurderingAnkeAfter2027State();
-  const canEdit = useIsTildeltSaksbehandler();
+  const canEdit = useCanEditBehandling();
 
   if (!isSuccess) {
     return null;

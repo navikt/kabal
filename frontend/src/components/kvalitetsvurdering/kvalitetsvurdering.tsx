@@ -13,15 +13,10 @@ import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useKvalitetsvurderingEnabled } from '@/hooks/settings/use-setting';
 import { SaksTypeEnum } from '@/types/kodeverk';
 import { isKakaKvalitetsvurdering, isKantKvalitetsvurdering } from '@/types/kvalitetsvurdering/common';
-import { type IOppgavebehandling, KvalitetsvurderingVersion } from '@/types/oppgavebehandling/oppgavebehandling';
+import { KvalitetsvurderingVersion } from '@/types/oppgavebehandling/oppgavebehandling';
 
 export const Kvalitetsvurdering = (): React.JSX.Element | null => {
-  const { data: oppgave } = useOppgave();
-
-  return oppgave === undefined ? null : <KvalitetsvurderingLoaded oppgave={oppgave} />;
-};
-export const KvalitetsvurderingLoaded = ({ oppgave }: { oppgave: IOppgavebehandling }): React.JSX.Element | null => {
-  const { featureEnabled, panelDefaultEnabled, reason } = useKvalitetsvurderingSupported(oppgave);
+  const { featureEnabled, panelDefaultEnabled, reason } = useKvalitetsvurderingSupported();
   const { value: shown = panelDefaultEnabled } = useKvalitetsvurderingEnabled();
 
   if (!featureEnabled || !shown) {
@@ -69,8 +64,10 @@ const Kvalitetsskjema = () => {
   if (isKantKvalitetsvurdering(data)) {
     switch (data.typeId) {
       case SaksTypeEnum.ANKE_AFTER_2027:
+      case SaksTypeEnum.ANKE:
         return <KvalitetsskjemaAnkeAfter2027 />;
       case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:
+      case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
         return <KvalitetsskjemaAnkeITRAfter2027 />;
     }
   }

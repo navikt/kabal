@@ -157,10 +157,6 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
       query: (params) => ({ url: '/kabal-search/anketeam/oppgaver/tildelte/paavent', params }),
       providesTags: [OppgaveListTagTypes.ANKETEAM_VENTENDE],
     }),
-    getAnketeamFerdigstilteOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
-      query: (params) => ({ url: '/kabal-search/anketeam/oppgaver/tildelte/ferdigstilte', params }),
-      providesTags: [OppgaveListTagTypes.ANKETEAM_FERDIGSTILTE],
-    }),
   }),
 });
 
@@ -195,5 +191,4 @@ export const {
   useGetAnketeamLedigeOppgaverQuery,
   useGetAnketeamTildelteOppgaverQuery,
   useGetAnketeamVentendeOppgaverQuery,
-  useGetAnketeamFerdigstilteOppgaverQuery,
 } = oppgaverQuerySlice;

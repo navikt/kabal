@@ -3,7 +3,6 @@ import { useKvalitetsvurderingSupported } from '@/components/oppgavebehandling-c
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useDocumentsEnabled, useKvalitetsvurderingEnabled, useSmartEditorEnabled } from '@/hooks/settings/use-setting';
 import { pushEvent } from '@/observability';
-import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 export const PanelSwitches = () => {
   const { value: documentsEnabled = true, setValue: setDocumentsEnabled } = useDocumentsEnabled();
@@ -50,13 +49,7 @@ const Brevutforming = () => {
 };
 
 const Kvalitetsvurdering = () => {
-  const { data: oppgave } = useOppgave();
-
-  return oppgave === undefined ? null : <KvalitetsvurderingLoaded oppgave={oppgave} />;
-};
-
-const KvalitetsvurderingLoaded = ({ oppgave }: { oppgave: IOppgavebehandling }) => {
-  const { featureEnabled, panelDefaultEnabled } = useKvalitetsvurderingSupported(oppgave);
+  const { featureEnabled, panelDefaultEnabled } = useKvalitetsvurderingSupported();
   const { value = panelDefaultEnabled, setValue } = useKvalitetsvurderingEnabled();
 
   if (!featureEnabled) {

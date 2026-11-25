@@ -259,7 +259,10 @@ export const createSaksinfo = ({
   const withSaksnummerHosTR =
     sakstype === SaksTypeEnum.ANKE_AFTER_2027 ||
     sakstype === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027 ||
-    sakstype === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027
+    sakstype === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027 ||
+    sakstype === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027 ||
+    sakstype === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+    sakstype === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK
       ? [...withArenaSaksnummer, createSaksnummerHosTR()]
       : withArenaSaksnummer;
 

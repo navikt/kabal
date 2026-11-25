@@ -4,7 +4,7 @@ import { differenceInMilliseconds, parseISO } from 'date-fns';
 import { useMemo } from 'react';
 import { MedunderskriverReadOnly } from '@/components/behandling/behandlingsdialog/medunderskriver/read-only';
 import { SELECT_SKELETON } from '@/components/behandling/behandlingsdialog/medunderskriver/skeleton';
-import { hasKvalitetsvurdering } from '@/components/oppgavebehandling-controls/use-hide-kvalitetsvurdering';
+import { useHasKvalitetsvurdering } from '@/components/oppgavebehandling-controls/use-hide-kvalitetsvurdering';
 import { useSetMedunderskriver } from '@/components/oppgavestyring/use-set-medunderskriver';
 import { toSaksbehandlerAndMUEntry } from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
 import { SearchableSelect } from '@/components/searchable-select/searchable-single-select/searchable-single-select';
@@ -19,14 +19,11 @@ import { useGetPotentialMedunderskrivereQuery } from '@/redux-api/oppgaver/queri
 import { useKlageenheter } from '@/simple-api-state/use-kodeverk';
 import type { INavEmployee, INavEmployeeWithEnhet } from '@/types/bruker';
 import { Role } from '@/types/bruker';
-import type { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
-import { FlowState, type IMedunderskriver } from '@/types/oppgave-common';
+import { FlowState } from '@/types/oppgave-common';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
-  id: string;
-  typeId: SaksTypeEnum;
-  utfallId: UtfallEnum | null;
-  medunderskriver: IMedunderskriver;
+  behandling: IOppgavebehandling;
 }
 
 const NONE_LABEL = 'Ingen';
@@ -37,7 +34,8 @@ const NONE_ENTRY: Entry<INavEmployeeWithEnhet | null> = {
   label: NONE_LABEL,
 };
 
-export const SelectMedunderskriver = ({ id, typeId, utfallId, medunderskriver }: Props) => {
+export const SelectMedunderskriver = ({ behandling }: Props) => {
+  const { id, medunderskriver } = behandling;
   const [, { isLoading }] = useTildelSaksbehandlerMutation({ fixedCacheKey: id });
   const isTildeltSaksbehandler = useIsTildeltSaksbehandler();
   const isTildeltMu = useIsAssignedMedunderskriver();
@@ -49,6 +47,7 @@ export const SelectMedunderskriver = ({ id, typeId, utfallId, medunderskriver }:
   const isMedunderskriver = useIsAssignedMedunderskriverAndSent();
 
   const [kvalitetsvurdering] = useKvalitetsvurdering();
+  const hasKvalitetsvurdering = useHasKvalitetsvurdering();
 
   const canChange =
     isTildeltSaksbehandler ||
@@ -74,7 +73,7 @@ export const SelectMedunderskriver = ({ id, typeId, utfallId, medunderskriver }:
 
   const handleChange = (employee: INavEmployeeWithEnhet | null) => {
     if (
-      hasKvalitetsvurdering(typeId, utfallId) &&
+      hasKvalitetsvurdering &&
       medunderskriver.flowState === FlowState.NOT_SENT &&
       employee !== null &&
       kvalitetsvurdering !== undefined

@@ -10,7 +10,6 @@ import { SærregelverketSaksdataHjemlerList } from '@/components/kvalitetsvurder
 import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
-import { toast } from '@/components/toast/store';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@/hooks/use-can-edit';
 import { useLovkildeToRegistreringshjemmelForYtelse } from '@/hooks/use-kodeverk-value';
@@ -99,13 +98,17 @@ export const Lovhjemmel = () => {
   const hasHjemmelDependantKvalitetsvurdering = isKantKvalitetsvurdering(oppgave) || isKakaKvalitetsvurdering(oppgave);
 
   const handleChange = (values: HjemmelOption[]) => {
-    if (oppgave === undefined || !hasHjemmelDependantKvalitetsvurdering) {
+    if (oppgave === undefined) {
       return;
     }
 
     const ids = values.map(({ id }) => id);
 
     updateHjemler({ oppgaveId: oppgave.id, hjemmelIdSet: ids });
+
+    if (!hasHjemmelDependantKvalitetsvurdering) {
+      return;
+    }
 
     /* Update hjemler in kvalitetsvurdering.
      * If one: Select it
@@ -115,7 +118,7 @@ export const Lovhjemmel = () => {
 
     if (
       isKantKvalitetsvurdering(oppgave) &&
-      oppgave.typeId === SaksTypeEnum.ANKE_AFTER_2027 &&
+      (oppgave.typeId === SaksTypeEnum.ANKE_AFTER_2027 || oppgave.typeId === SaksTypeEnum.ANKE) &&
       ankeAfter2027IsSuccess
     ) {
       return updateAnkeAfter2027(
@@ -125,7 +128,8 @@ export const Lovhjemmel = () => {
 
     if (
       isKantKvalitetsvurdering(oppgave) &&
-      oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027 &&
+      (oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027 ||
+        oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) &&
       ankeITRAfter2027IsSuccess
     ) {
       return updateAnkeITRAfter2027(
@@ -140,8 +144,6 @@ export const Lovhjemmel = () => {
     ) {
       return updateKvalitetsvurdering(getUpdate(kvalitetsvurderingHjemler));
     }
-
-    toast.error(`Kunne ikke oppdatere kvalitetsvurdering${ids.length === 1 ? ' med valgt hjemmel' : ''}.`);
   };
 
   if (oppgave === undefined) {

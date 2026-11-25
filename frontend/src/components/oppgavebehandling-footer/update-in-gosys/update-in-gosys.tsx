@@ -82,7 +82,11 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
   const [avsluttGosysOppgaveState, setAvsluttGosysOppgaveState] = useState(false);
 
   const gosysOppgaveIsOpen = hasGosysOppgave && gosysOppgave.editable;
-  const showAvsluttGosysOppgave = typeId !== SaksTypeEnum.KLAGE && !isAnkeOrGbWithUtfallToTr;
+  const showAvsluttGosysOppgave =
+    typeId !== SaksTypeEnum.KLAGE &&
+    typeId !== SaksTypeEnum.ANKE_AFTER_2027 &&
+    typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027 &&
+    !isAnkeOrGbWithUtfallToTr;
   const avsluttGosysOppgave = showAvsluttGosysOppgave && avsluttGosysOppgaveState;
 
   const handleFinish = async () => {

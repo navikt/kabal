@@ -160,7 +160,11 @@ export interface IKlagebehandling extends IOppgavebehandlingBase, WithKakaKvalit
   typeId: SaksTypeEnum.KLAGE;
 }
 
-export interface IAnkebehandling extends IOppgavebehandlingBase, WithKakaKvalitetsvurdering {
+interface IKakaAnkebehandling extends IOppgavebehandlingBase, WithKakaKvalitetsvurdering {
+  typeId: SaksTypeEnum.ANKE;
+}
+
+interface IKantAnkebehandling extends IOppgavebehandlingBase, WithKantKvalitetsvurdering {
   typeId: SaksTypeEnum.ANKE;
 }
 
@@ -213,12 +217,18 @@ export interface IBegjæringOmGjenopptakAfter2027Behandling extends IOppgavebeha
   trygderettenSaksnummer: string | null;
 }
 
-export type KantBehandling = IAnkeAfter2027Behandling | IAnkeITRAfter2027Behandling | ITrygderettsankebehandling;
-export type KakaBehandling = IKlagebehandling | IAnkebehandling;
+export type KantBehandling =
+  | IAnkeAfter2027Behandling
+  | IAnkeITRAfter2027Behandling
+  | ITrygderettsankebehandling
+  | IKantAnkebehandling;
+
+export type KakaBehandling = IKlagebehandling | IKakaAnkebehandling;
 
 export type IOppgavebehandling =
   | IKlagebehandling
-  | IAnkebehandling
+  | IKakaAnkebehandling
+  | IKantAnkebehandling
   | ITrygderettsankebehandling
   | IBehandlingEtterTryderettenOpphevet
   | IOmgjøringskravbehandling

@@ -26,15 +26,13 @@ export const Saksnummer = (props: PlateElementProps<SaksnummerElement>) => {
 export const SaksnummerHosTR = (props: PlateElementProps<SaksnummerHosTRElement>) => {
   const { data: oppgave } = useOppgave();
 
-  if (
-    oppgave === undefined ||
-    'trygderettenSaksnummer' in oppgave === false ||
-    oppgave.trygderettenSaksnummer === null
-  ) {
+  if (oppgave === undefined) {
     return null;
   }
 
-  return <SaksnummerBase {...props} label="Saksnummer hos Trygderetten" saksnummer={oppgave.trygderettenSaksnummer} />;
+  const saksnummer = 'trygderettenSaksnummer' in oppgave ? (oppgave.trygderettenSaksnummer ?? '') : '';
+
+  return <SaksnummerBase {...props} label="Saksnummer hos Trygderetten" saksnummer={saksnummer} />;
 };
 
 // Shown whenever it is part of the template, regardless of whether the oppgave has loaded or has a value yet.

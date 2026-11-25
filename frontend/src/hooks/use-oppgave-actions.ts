@@ -107,12 +107,12 @@ const canAssignOthers = ({
   hasOppgavestyringAnketeamAccess,
   typeId,
 }: Values): boolean => {
-  if (isAnketeamSakstype(typeId)) {
-    return hasOppgavestyringAnketeamAccess || (hasAnketeamAccess && isAssignedToSelf);
-  }
-
   if (hasOppgavestyringAccess) {
     return true;
+  }
+
+  if (isAnketeamSakstype(typeId)) {
+    return hasOppgavestyringAnketeamAccess || (hasAnketeamAccess && isAssignedToSelf);
   }
 
   if (hasSaksbehandlerAccess && isAssignedToSelf) {

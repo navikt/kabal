@@ -140,7 +140,8 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         if (
           isAnkeTypeAfter2027(oppgave.typeId) ||
           oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
-          oppgave.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR
+          oppgave.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR ||
+          oppgave.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027
         ) {
           return <Table.DataCell key={key} />;
         }

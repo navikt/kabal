@@ -24,7 +24,6 @@ export enum OppgaveListTagTypes {
   ANKETEAM_LEDIGE = 'anketeam-ledige',
   ANKETEAM_TILDELTE = 'anketeam-tildelte',
   ANKETEAM_VENTENDE = 'anketeam-paa-vent',
-  ANKETEAM_FERDIGSTILTE = 'anketeam-ferdigstilte',
 }
 
 export const OPPGAVELIST_TAG_TYPES = Object.values(OppgaveListTagTypes);

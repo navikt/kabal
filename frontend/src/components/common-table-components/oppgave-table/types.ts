@@ -18,7 +18,6 @@ export enum OppgaveTableKey {
   ANKETEAM_LEDIGE = 'oal',
   ANKETEAM_TILDELTE = 'oat',
   ANKETEAM_VENTENDE = 'oav',
-  ANKETEAM_FERDIGE = 'oaf',
 }
 
 export enum StaticOppgaveTableKey {

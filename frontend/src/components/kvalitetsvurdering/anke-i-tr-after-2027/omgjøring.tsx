@@ -16,7 +16,6 @@ import { HelpTextCheckBox } from '@/components/kvalitetsvurdering/common/kvalite
 import { StyledRadioGroup } from '@/components/kvalitetsvurdering/common/styled-components';
 import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { useCanEditBehandling } from '@/hooks/use-can-edit';
-import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { OmgjøringHjemlerField, Section } from '@/types/kvalitetsvurdering/anke-i-tr-after-2027';
 
 const OMGJØRING_HEADER = SECTION_LABELS[Section.OmgjortIAnkeomgangen];
@@ -25,7 +24,6 @@ const ÅRSAKER = Object.values(OmgjøringHjemlerField);
 export const Omgjøring = () => {
   const { isSuccess, kvalitetsvurdering, update, hjemler } = useKvalitetsvurderingAnkeITRAfter2027State();
   const canEdit = useCanEditBehandling();
-  const isTildeltSaksbehandler = useIsTildeltSaksbehandler();
   const validationError = useValidationError(ValidationField.OmgjøringIAnkeomgangen);
 
   if (!isSuccess) {
@@ -89,11 +87,7 @@ export const Omgjøring = () => {
           >
             {ÅRSAKER.map((field) => (
               <Fragment key={field}>
-                <HelpTextCheckBox
-                  value={field}
-                  disabled={!isTildeltSaksbehandler}
-                  helpText={OMGJØRING_HELP_TEXTS[field]}
-                >
+                <HelpTextCheckBox value={field} disabled={!canEdit} helpText={OMGJØRING_HELP_TEXTS[field]}>
                   {OMGJØRING_LABELS[field]}
                 </HelpTextCheckBox>
                 {omgjortIAnkeomgangen[field].selected ? <OmgjøringHjemler field={field} /> : null}

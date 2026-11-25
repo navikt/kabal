@@ -34,10 +34,10 @@ export const useKvalitetsvurdering = (): [IKvalitetsvurdering | undefined, boole
     getIdOrSkipTokenForKaka(oppgave, KvalitetsvurderingVersion.V3),
   );
   const { data: ankeAfter2027, isLoading: ankeAfter2027Loading } = useGetKvalitetsvurderingQueryAnkeAfter2027(
-    getIdOrSkipTokenForKant(oppgave, SaksTypeEnum.ANKE_AFTER_2027),
+    getIdOrSkipTokenForKant(oppgave, [SaksTypeEnum.ANKE_AFTER_2027, SaksTypeEnum.ANKE]),
   );
   const { data: ankeITRAfter2027, isLoading: ankeITRAfter2027Loading } = useGetKvalitetsvurderingQueryAnkeITRAfter2027(
-    getIdOrSkipTokenForKant(oppgave, SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027),
+    getIdOrSkipTokenForKant(oppgave, [SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027, SaksTypeEnum.ANKE_I_TRYGDERETTEN]),
   );
 
   return [
@@ -75,14 +75,16 @@ export const useKvalitetsvurderingV3 = () => {
 export const useKvalitetsvurderingAnkeAfter2027 = () => {
   const { data: oppgave } = useOppgave();
 
-  return useGetKvalitetsvurderingQueryAnkeAfter2027(getIdOrSkipTokenForKant(oppgave, SaksTypeEnum.ANKE_AFTER_2027));
+  return useGetKvalitetsvurderingQueryAnkeAfter2027(
+    getIdOrSkipTokenForKant(oppgave, [SaksTypeEnum.ANKE_AFTER_2027, SaksTypeEnum.ANKE]),
+  );
 };
 
 export const useKvalitetsvurderingAnkeITRAfter2027 = () => {
   const { data: oppgave } = useOppgave();
 
   return useGetKvalitetsvurderingQueryAnkeITRAfter2027(
-    getIdOrSkipTokenForKant(oppgave, SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027),
+    getIdOrSkipTokenForKant(oppgave, [SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027, SaksTypeEnum.ANKE_I_TRYGDERETTEN]),
   );
 };
 
@@ -103,7 +105,7 @@ const getIdOrSkipTokenForKaka = (
 
 const getIdOrSkipTokenForKant = (
   oppgave: IOppgavebehandling | undefined,
-  sakstype: SaksTypeEnum,
+  sakstyper: SaksTypeEnum[],
 ): string | typeof skipToken => {
   if (oppgave === undefined || !isKantKvalitetsvurdering(oppgave)) {
     return skipToken;
@@ -111,7 +113,7 @@ const getIdOrSkipTokenForKant = (
 
   const { kantReference, typeId } = oppgave;
 
-  if (kantReference === null || sakstype !== typeId) {
+  if (kantReference === null || !sakstyper.includes(typeId)) {
     return skipToken;
   }
 
