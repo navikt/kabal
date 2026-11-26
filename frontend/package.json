@@ -31,6 +31,7 @@
     "@grafana/faro-react": "2.14.0",
     "@grafana/faro-web-sdk": "2.14.0",
     "@grafana/faro-web-tracing": "2.14.0",
+    "@nais/apm": "0.7.3",
     "@navikt/aksel-icons": "8.23.0",
     "@navikt/ds-css": "8.23.0",
     "@navikt/ds-react": "8.23.0",
@@ -63,5 +64,9 @@
   },
   "peerDependencies": {
     "slate": "*"
+  },
+  "overrides": {
+    "@grafana/faro-web-sdk": "2.14.0",
+    "@grafana/faro-web-tracing": "2.14.0"
   }
 }

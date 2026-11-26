@@ -61,6 +61,7 @@ jobs:
           bun-version: latest
           registries: |
             @navikt:https://npm.pkg.github.com/|$BUN_AUTH_TOKEN
+            @nais:https://npm.pkg.github.com/|$BUN_AUTH_TOKEN
 
       - name: Rename bunfig to global config name
         run: mv bunfig.toml .bunfig.toml

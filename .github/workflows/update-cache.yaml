@@ -26,11 +26,11 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Configure @navikt scope
+      - name: Configure @navikt and @nais scopes
         shell: bash
         run: |
           for dir in . ${{ matrix.apps }}; do
-            echo -e '\n[install.scopes]\n"@navikt" = { token = "$BUN_AUTH_TOKEN", url = "https://npm.pkg.github.com/" }' >> "$dir/bunfig.toml"
+            echo -e '\n[install.scopes]\n"@navikt" = { token = "$BUN_AUTH_TOKEN", url = "https://npm.pkg.github.com/" }\n"@nais" = { token = "$BUN_AUTH_TOKEN", url = "https://npm.pkg.github.com/" }' >> "$dir/bunfig.toml"
           done
 
       - name: Install common dependencies
