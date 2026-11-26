@@ -7,6 +7,7 @@ import { OrgWarning } from '@/components/behandling/behandlingsdetaljer/klager';
 import { Lovhjemmel } from '@/components/behandling/behandlingsdetaljer/lovhjemmel/lovhjemmel';
 import { PreviousSaksbehandler } from '@/components/behandling/behandlingsdetaljer/previous-saksbehandler';
 import { Saksnummer } from '@/components/behandling/behandlingsdetaljer/saksnummer';
+import { SaksnummerHosTrygderettenInput } from '@/components/behandling/behandlingsdetaljer/saksnummer-hos-tr-input';
 import { SendtTilTrygderetten } from '@/components/behandling/behandlingsdetaljer/sendt-til-trygderetten';
 import { Tilbakekreving } from '@/components/behandling/behandlingsdetaljer/tilbakekreving';
 import { UtfallResultat } from '@/components/behandling/behandlingsdetaljer/utfall-resultat';
@@ -55,6 +56,8 @@ export const Trygderettsankebehandlingsdetaljer = ({ oppgavebehandling }: Props)
           />
 
           <Saksnummer saksnummer={saksnummer} />
+
+          <SaksnummerHosTrygderettenInput />
 
           <Innsendingshjemmel oppgavebehandling={oppgavebehandling} />
 

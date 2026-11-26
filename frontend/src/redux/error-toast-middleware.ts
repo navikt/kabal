@@ -2,6 +2,7 @@ import { isRejectedWithValue, type Middleware } from '@reduxjs/toolkit';
 import { bffErrorToast, genericErrorToast, kabalErrorToast } from '@/components/toast/toast-content/api-error-toast';
 import { isObject } from '@/functions/object';
 import { behandlingerMutationSlice } from '@/redux-api/oppgaver/mutations/behandling';
+import { behandlingsdetaljerMutationSlice } from '@/redux-api/oppgaver/mutations/behandling-dates';
 import { documentsMutationSlice } from '@/redux-api/oppgaver/mutations/documents';
 import { oppgaveDataQuerySlice } from '@/redux-api/oppgaver/queries/oppgave-data';
 import { sendToTrygderettenApi } from '@/redux-api/send-to-trygderetten';
@@ -12,6 +13,7 @@ const { finishDocument } = documentsMutationSlice.endpoints;
 const { getOppgave } = oppgaveDataQuerySlice.endpoints;
 const { uploadFileDocument } = documentsMutationSlice.endpoints;
 const { sendToTrygderetten } = sendToTrygderettenApi.endpoints;
+const { setSaksnummerHosTrygderetten } = behandlingsdetaljerMutationSlice.endpoints;
 
 /** Extract the trace ID (32 hex chars) from the request's traceparent header. */
 const extractTraceId = (meta: unknown): string | undefined => {
@@ -89,6 +91,10 @@ const handleError = (payload: unknown, arg: Arg): boolean => {
   }
 
   if (arg.endpointName === sendToTrygderetten.name && payload.status === 400) {
+    return true;
+  }
+
+  if (arg.endpointName === setSaksnummerHosTrygderetten.name && payload.status === 400) {
     return true;
   }
 
