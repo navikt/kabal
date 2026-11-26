@@ -66,6 +66,7 @@ export enum PartStatusEnum {
   STRENGT_FORTROLIG = 'STRENGT_FORTROLIG',
   RESERVERT_I_KRR = 'RESERVERT_I_KRR',
   DELT_ANSVAR = 'DELT_ANSVAR',
+  FALSK_ID = 'FALSK_ID',
 }
 
 export type IPersonStatus =
@@ -95,6 +96,10 @@ export type IPersonStatus =
     }
   | {
       status: PartStatusEnum.RESERVERT_I_KRR;
+      date: null;
+    }
+  | {
+      status: PartStatusEnum.FALSK_ID;
       date: null;
     };
 

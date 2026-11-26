@@ -58,6 +58,7 @@ const STATUS_NAMES: Record<PartStatusEnum, React.ReactNode> = {
   [PartStatusEnum.STRENGT_FORTROLIG]: 'Strengt fortrolig',
   [PartStatusEnum.RESERVERT_I_KRR]: 'Reservert i KRR',
   [PartStatusEnum.DELT_ANSVAR]: 'Delt ansvar',
+  [PartStatusEnum.FALSK_ID]: 'Falsk identitet',
 };
 
 const STATUS_COLOR: Record<PartStatusEnum, TagProps['data-color']> = {
@@ -70,4 +71,5 @@ const STATUS_COLOR: Record<PartStatusEnum, TagProps['data-color']> = {
   [PartStatusEnum.STRENGT_FORTROLIG]: 'meta-purple',
   [PartStatusEnum.RESERVERT_I_KRR]: 'warning',
   [PartStatusEnum.DELT_ANSVAR]: 'info',
+  [PartStatusEnum.FALSK_ID]: 'danger',
 };
