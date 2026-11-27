@@ -72,7 +72,6 @@ export const ReceivingEnhet = ({ selectedEnhet, setSelectedEnhet, enheter, error
         <legend className="font-ax-bold mb-2">Velg enhet som skal motta oppgaven</legend>
 
         <Search
-          style={{ width: 600 }}
           size="small"
           label="Filtrer på enhetsnavn eller enhetsnummer"
           placeholder="Filtrer på enhetsnavn eller enhetsnummer"
