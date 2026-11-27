@@ -1,5 +1,4 @@
 import '@/tracing';
-import '@/set-faro-user';
 import { createRoot } from 'react-dom/client';
 import { App } from '@/components/app/app';
 import { FRAME_TIMES } from '@/frame-times';
