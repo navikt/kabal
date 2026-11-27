@@ -1,4 +1,4 @@
-import type { IKvalitetsvurderingData } from '@/types/kaka-kvalitetsvurdering/v2';
+import type { IKvalitetsvurderingData } from '@/types/kvalitetsvurdering/v2';
 
 type Keys = keyof IKvalitetsvurderingData;
 

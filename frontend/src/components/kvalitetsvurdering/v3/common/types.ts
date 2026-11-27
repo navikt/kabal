@@ -7,7 +7,7 @@ import type {
   KvalitetsvurderingSaksdataRegistreringshjemlerV3,
   KvalitetsvurderingStrings,
   KvalitetsvurderingV3Boolean,
-} from '@/types/kaka-kvalitetsvurdering/v3';
+} from '@/types/kvalitetsvurdering/v3';
 
 interface BaseParams {
   label: string;

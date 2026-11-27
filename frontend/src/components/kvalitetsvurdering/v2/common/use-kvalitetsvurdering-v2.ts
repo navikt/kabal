@@ -2,8 +2,9 @@ import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useKvalitetsvurderingV2 } from '@/hooks/use-kvalitetsvurdering';
-import { useUpdateKvalitetsvurderingMutation } from '@/redux-api/kaka-kvalitetsvurdering/v2';
-import type { IKvalitetsvurdering, IKvalitetsvurderingData } from '@/types/kaka-kvalitetsvurdering/v2';
+import { useUpdateKvalitetsvurderingMutation } from '@/redux-api/kvalitetsvurdering/v2';
+import { isKakaKvalitetsvurdering } from '@/types/kvalitetsvurdering/common';
+import type { IKvalitetsvurdering, IKvalitetsvurderingData } from '@/types/kvalitetsvurdering/v2';
 import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface UpdateStatus {
@@ -39,7 +40,8 @@ export const useKvalitetsvurderingV2State = (): Loading | Loaded => {
   const [kvalitetsvurdering, kvalitetsvurderingIsLoading] = useKvalitetsvurderingV2();
   const [update, updateStatus] = useUpdateKvalitetsvurderingMutation();
 
-  const id = oppgave?.kvalitetsvurderingReference?.id;
+  const id =
+    oppgave !== undefined && isKakaKvalitetsvurdering(oppgave) ? oppgave.kvalitetsvurderingReference.id : undefined;
 
   if (
     oppgaveIsLoading ||

@@ -8,7 +8,7 @@ import { useRegistreringshjemlerMap } from '@/simple-api-state/use-kodeverk';
 import type {
   IKvalitetsvurderingBooleans,
   IKvalitetsvurderingSaksdataRegistreringshjemler,
-} from '@/types/kaka-kvalitetsvurdering/v2';
+} from '@/types/kvalitetsvurdering/v2';
 
 interface Props {
   field: keyof IKvalitetsvurderingSaksdataRegistreringshjemler;

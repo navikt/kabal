@@ -59,6 +59,7 @@ spec:
         - application: klage-notifications-api
         - application: klage-unleash-proxy
         - application: klage-lookup
+        - application: kant-api
         - application: logging
           namespace: nais-system
       external:

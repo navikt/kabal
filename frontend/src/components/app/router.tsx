@@ -20,6 +20,7 @@ import { MineOppgaverPage } from '@/pages/mine-oppgaver/mine-oppgaver';
 import { OppgavebehandlingPage } from '@/pages/oppgavebehandling/oppgavebehandling';
 import { OppgaverPage } from '@/pages/oppgaver/oppgaver';
 import { OppgavestyringPage } from '@/pages/oppgavestyring/oppgavestyring';
+import { OppgavestyringAnketeamPage } from '@/pages/oppgavestyring-anketeam/oppgavestyring-anketeam';
 import { RedigerbareMalteksterPage } from '@/pages/redigerbare-maltekster/redigerbare-maltekster';
 import { RegelverkPage } from '@/pages/regelverk/regelverk';
 import { SakerITRPage } from '@/pages/saker-i-tr/saker-i-tr';
@@ -39,7 +40,11 @@ export const Router = () => (
     <Route element={<AppWrapper />}>
       <Route path="/" element={<LandingPage />} />
 
-      <Route element={<ProtectedRoute roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL]} />}>
+      <Route
+        element={
+          <ProtectedRoute roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL, Role.KABAL_OPPGAVESTYRING_ANKETEAM]} />
+        }
+      >
         <Route path="oppgaver" element={<OppgaverPage />} />
         <Route path="mineoppgaver" element={<MineOppgaverPage />} />
         <Route path="behandling/:oppgaveId" element={<OppgavebehandlingPage />} />
@@ -55,6 +60,10 @@ export const Router = () => (
 
       <Route element={<ProtectedRoute roles={[Role.KABAL_INNSYN_EGEN_ENHET, Role.KABAL_KROL]} />}>
         <Route path="oppgavestyring" element={<OppgavestyringPage />} />
+      </Route>
+
+      <Route element={<ProtectedRoute roles={[Role.KABAL_OPPGAVESTYRING_ANKETEAM]} />}>
+        <Route path="oppgavestyring-anketeam" element={<OppgavestyringAnketeamPage />} />
       </Route>
 
       <Route element={<ProtectedRoute roles={[Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER]} />}>

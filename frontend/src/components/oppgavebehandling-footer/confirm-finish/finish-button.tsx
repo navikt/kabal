@@ -6,6 +6,7 @@ import { isReduxValidationResponse } from '@/functions/error-type-guard';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useFinishOppgavebehandlingMutation } from '@/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
+import { getKvalitetsvurderingId } from '@/types/kvalitetsvurdering/common';
 import type { IFinishOppgavebehandlingParams } from '@/types/oppgavebehandling/params';
 
 interface FinishButtonProps {
@@ -25,19 +26,23 @@ export const FinishButton = ({ children, nyBehandling = false, disabled }: Finis
   }
 
   const finish = async () => {
+    const kvalitetsvurderingId = getKvalitetsvurderingId(oppgave);
     const params: IFinishOppgavebehandlingParams =
-      (oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN && oppgave.resultat.utfallId === UtfallEnum.OPPHEVET) ||
-      (oppgave.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR &&
+      ((oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+        oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027) &&
+        oppgave.resultat.utfallId === UtfallEnum.OPPHEVET) ||
+      ((oppgave.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR ||
+        oppgave.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027) &&
         oppgave.resultat.utfallId === UtfallEnum.GJENOPPTATT_OPPHEVET)
         ? {
             oppgaveId: oppgave.id,
             typeId: oppgave.typeId,
-            kvalitetsvurderingId: oppgave.kvalitetsvurderingReference?.id ?? null,
+            kvalitetsvurderingId,
             nyBehandling,
           }
         : {
             oppgaveId: oppgave.id,
-            kvalitetsvurderingId: oppgave.kvalitetsvurderingReference?.id ?? null,
+            kvalitetsvurderingId,
             nyBehandling: false,
           };
 

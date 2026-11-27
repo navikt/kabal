@@ -12,7 +12,7 @@ import {
 import type { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from '@/components/kvalitetsvurdering/v2/common/use-field-name';
 import { useKvalitetsvurderingV2State } from '@/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
 import { useValidationError } from '@/components/kvalitetsvurdering/v2/common/use-validation-error';
-import type { IKvalitetsvurderingBooleans, IKvalitetsvurderingData } from '@/types/kaka-kvalitetsvurdering/v2';
+import type { IKvalitetsvurderingBooleans, IKvalitetsvurderingData } from '@/types/kvalitetsvurdering/v2';
 
 interface Props {
   kvalitetsvurdering: IKvalitetsvurderingData;

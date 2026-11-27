@@ -23,17 +23,17 @@ import {
 import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@/hooks/use-can-edit';
-import { Radiovalg } from '@/types/kaka-kvalitetsvurdering/radio';
 import { SaksTypeEnum } from '@/types/kodeverk';
+import { Radiovalg } from '@/types/kvalitetsvurdering/radio';
 
 export const Saksbehandlingsreglene = () => {
-  const { isLoading, kvalitetsvurdering, update } = useKvalitetsvurderingV3State();
+  const { isSuccess, kvalitetsvurdering, update } = useKvalitetsvurderingV3State();
   const { data: oppgave } = useOppgave();
 
   const canEdit = useCanEditBehandling();
   const validationError = useValidationError(MainReason.Saksbehandlingsreglene);
 
-  if (isLoading || oppgave === undefined) {
+  if (!isSuccess || oppgave === undefined) {
     return null;
   }
 

@@ -37,6 +37,10 @@ export const Nav = () => (
         <Buildings3Icon aria-hidden /> Oppgavestyring
       </NavItem>
 
+      <NavItem to="/oppgavestyring-anketeam" roles={[Role.KABAL_OPPGAVESTYRING_ANKETEAM]}>
+        <Buildings3Icon aria-hidden /> Oppgavestyring Anketeam
+      </NavItem>
+
       <NavItem to="/saker-i-tr" roles={[Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER]}>
         <GavelIcon aria-hidden /> Saker i Trygderetten
       </NavItem>

@@ -26,6 +26,7 @@ export const DeassignOppgave = ({ oppgave }: Props) => {
     oppgave.medunderskriver.employee?.navIdent ?? null,
     oppgave.medunderskriver.flowState,
     oppgave.rol.flowState,
+    oppgave.typeId,
   );
 
   useOnClickOutside(ref, () => setIsOpen(false), true);
@@ -76,7 +77,7 @@ export const DeassignOppgave = ({ oppgave }: Props) => {
 
   const disabled = !oppgaveActions.deassignSelf;
   const title = disabled
-    ? 'Oppgaven kan ikke legges tilbake på felles kø. Dette kan være pga. manglende tilgang eller fordi oppgaven er hos medunderskriver, fagansvarlig eller rådgivende overlege.'
+    ? 'Oppgaven kan ikke legges tilbake på felles kø. Dette kan være pga. manglende tilgang eller fordi oppgaven er hos medunderskriver eller rådgivende overlege.'
     : undefined;
 
   return (

@@ -7,8 +7,8 @@ import { useKvalitetsvurderingV2FieldName } from '@/components/kvalitetsvurderin
 import { useKvalitetsvurderingV2State } from '@/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
 import { useValidationError } from '@/components/kvalitetsvurdering/v2/common/use-validation-error';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
-import { Radiovalg } from '@/types/kaka-kvalitetsvurdering/radio';
 import { SaksTypeEnum } from '@/types/kodeverk';
+import { Radiovalg } from '@/types/kvalitetsvurdering/radio';
 
 const KLAGEFORBEREDELSEN_FIELD = 'klageforberedelsen';
 

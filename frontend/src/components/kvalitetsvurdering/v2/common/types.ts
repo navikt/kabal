@@ -4,7 +4,7 @@ import type {
   IKvalitetsvurderingBooleans,
   IKvalitetsvurderingSaksdataRegistreringshjemler,
   IKvalitetsvurderingStrings,
-} from '@/types/kaka-kvalitetsvurdering/v2';
+} from '@/types/kvalitetsvurdering/v2';
 
 interface BaseParams {
   groupErrorField?: keyof typeof KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES;

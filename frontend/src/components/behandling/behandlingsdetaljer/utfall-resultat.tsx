@@ -105,8 +105,12 @@ export const UtfallResultat = ({ utfall, oppgaveId, extraUtfallIdSet, typeId }: 
       />
       {utfall === UtfallEnum.RETUR ? <ReturWarning /> : null}
       {typeId === SaksTypeEnum.ANKE && utfall === UtfallEnum.DELVIS_MEDHOLD ? <AnkeDelvisMedholdWarning /> : null}
-      {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN && utfall === UtfallEnum.HENVIST ? <AnkeITRHenvistWarning /> : null}
-      {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN && utfall === UtfallEnum.OPPHEVET ? (
+      {(typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN || typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027) &&
+      utfall === UtfallEnum.HENVIST ? (
+        <AnkeITRHenvistWarning />
+      ) : null}
+      {(typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN || typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027) &&
+      utfall === UtfallEnum.OPPHEVET ? (
         <AnkeITROpphevetWarning />
       ) : null}
     </VStack>

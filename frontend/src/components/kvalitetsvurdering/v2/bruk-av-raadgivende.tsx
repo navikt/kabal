@@ -8,7 +8,7 @@ import { useKvalitetsvurderingV2State } from '@/components/kvalitetsvurdering/v2
 import { useValidationError } from '@/components/kvalitetsvurdering/v2/common/use-validation-error';
 import { useIsRelevantYtelseForRaadgivende } from '@/hooks/use-is-relevant-ytelse-for-raadgivende';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
-import { RadiovalgExtended } from '@/types/kaka-kvalitetsvurdering/radio';
+import { RadiovalgExtended } from '@/types/kvalitetsvurdering/radio';
 
 const USE_ROL_FIELD = 'brukAvRaadgivendeLege';
 

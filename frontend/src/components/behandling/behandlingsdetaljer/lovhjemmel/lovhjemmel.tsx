@@ -1,7 +1,9 @@
 import { HelpText, HStack, Label, Skeleton, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useId, useMemo } from 'react';
+import { useId, useMemo } from 'react';
 import { PermitteringsårsakWarning } from '@/components/behandling/behandlingsdetaljer/permitteringsårsak-warning';
+import { useKvalitetsvurderingAnkeAfter2027State } from '@/components/kvalitetsvurdering/anke-after-2027/hooks';
+import { useKvalitetsvurderingAnkeITRAfter2027State } from '@/components/kvalitetsvurdering/anke-i-tr-after-2027/hooks';
 import { useKvalitetsvurderingV3State } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
 import { BegrunnelsespliktenSaksdataHjemlerLists } from '@/components/kvalitetsvurdering/v3/saksbehandlingsreglene/data';
 import { SærregelverketSaksdataHjemlerList } from '@/components/kvalitetsvurdering/v3/særregelverket/data';
@@ -13,6 +15,18 @@ import { useCanEditBehandling } from '@/hooks/use-can-edit';
 import { useLovkildeToRegistreringshjemmelForYtelse } from '@/hooks/use-kodeverk-value';
 import { useValidationError } from '@/hooks/use-validation-error';
 import { useUpdateRegistreringshjemlerMutation } from '@/redux-api/oppgaver/mutations/set-registreringshjemler';
+import { SaksTypeEnum } from '@/types/kodeverk';
+import type {
+  Section as AnkeAfter2027Section,
+  KvalitetsvurderingDataAnkeAfter2027,
+  OmgjortIKlageomgangen,
+} from '@/types/kvalitetsvurdering/anke-after-2027';
+import type {
+  Section as AnkeITRAfter2027Section,
+  KvalitetsvurderingDataAnkeITRAfter2027,
+  OmgjortIAnkeomgangen,
+} from '@/types/kvalitetsvurdering/anke-i-tr-after-2027';
+import { isKakaKvalitetsvurdering, isKantKvalitetsvurdering } from '@/types/kvalitetsvurdering/common';
 import { KvalitetsvurderingVersion } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface HjemmelOption {
@@ -24,11 +38,29 @@ interface HjemmelOption {
 export const Lovhjemmel = () => {
   const containerRef = usePanelContainerRef();
   const [updateHjemler] = useUpdateRegistreringshjemlerMutation();
-  const { data: oppgave } = useOppgave();
+  const { data: oppgave, isSuccess } = useOppgave();
   const canEdit = useCanEditBehandling();
   const validationError = useValidationError('hjemmel');
   const lovKildeToRegistreringshjemler = useLovkildeToRegistreringshjemmelForYtelse(oppgave?.ytelseId ?? skipToken);
-  const { update: updateKvalitetsvurdering, isLoading } = useKvalitetsvurderingV3State();
+  const {
+    update: updateKvalitetsvurdering,
+    isLoading: v3IsLoading,
+    isSuccess: v3IsSuccess,
+  } = useKvalitetsvurderingV3State();
+  const {
+    update: updateAnkeAfter2027,
+    kvalitetsvurdering: ankeAfter2027,
+    isLoading: ankeAfter2027IsLoading,
+    isSuccess: ankeAfter2027IsSuccess,
+  } = useKvalitetsvurderingAnkeAfter2027State();
+  const {
+    update: updateAnkeITRAfter2027,
+    kvalitetsvurdering: ankeITRAfter2027,
+    isLoading: ankeITRAfter2027IsLoading,
+    isSuccess: ankeITRAfter2027IsSuccess,
+  } = useKvalitetsvurderingAnkeITRAfter2027State();
+
+  const isLoading = v3IsLoading || ankeAfter2027IsLoading || ankeITRAfter2027IsLoading;
 
   const options = useMemo<Entry<HjemmelOption>[]>(
     () =>
@@ -57,34 +89,68 @@ export const Lovhjemmel = () => {
 
   const value = useMemo(() => options.filter(({ key }) => selected?.includes(key) === true), [options, selected]);
 
-  const handleChange = useCallback(
-    (values: HjemmelOption[]) => {
-      if (oppgave === undefined) {
-        return;
-      }
-
-      const ids = values.map(({ id }) => id);
-
-      updateHjemler({ oppgaveId: oppgave.id, hjemmelIdSet: ids });
-
-      /* Update hjemler in kvalitetsvurdering.
-       * If one: Select it
-       * If multiple or zero: Reset all selected
-       */
-      if (oppgave.kvalitetsvurderingReference !== null && !isLoading) {
-        updateKvalitetsvurdering(getUpdate(ids.length === 1 ? ids : []));
-      }
-    },
-    [updateHjemler, oppgave, updateKvalitetsvurdering, isLoading],
-  );
-
   const selectId = useId();
+
+  if (!isSuccess) {
+    return null;
+  }
+
+  const hasHjemmelDependantKvalitetsvurdering = isKantKvalitetsvurdering(oppgave) || isKakaKvalitetsvurdering(oppgave);
+
+  const handleChange = (values: HjemmelOption[]) => {
+    if (oppgave === undefined) {
+      return;
+    }
+
+    const ids = values.map(({ id }) => id);
+
+    updateHjemler({ oppgaveId: oppgave.id, hjemmelIdSet: ids });
+
+    if (!hasHjemmelDependantKvalitetsvurdering) {
+      return;
+    }
+
+    /* Update hjemler in kvalitetsvurdering.
+     * If one: Select it
+     * If multiple or zero: Reset all selected
+     */
+    const kvalitetsvurderingHjemler = ids.length === 1 ? ids : [];
+
+    if (
+      isKantKvalitetsvurdering(oppgave) &&
+      (oppgave.typeId === SaksTypeEnum.ANKE_AFTER_2027 || oppgave.typeId === SaksTypeEnum.ANKE) &&
+      ankeAfter2027IsSuccess
+    ) {
+      return updateAnkeAfter2027(
+        getAnkeAfter2027Update(kvalitetsvurderingHjemler, ankeAfter2027.omgjortIKlageomgangen),
+      );
+    }
+
+    if (
+      isKantKvalitetsvurdering(oppgave) &&
+      (oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027 ||
+        oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) &&
+      ankeITRAfter2027IsSuccess
+    ) {
+      return updateAnkeITRAfter2027(
+        getAnkeITRAfter2027Update(kvalitetsvurderingHjemler, ankeITRAfter2027.omgjortIAnkeomgangen),
+      );
+    }
+
+    if (
+      isKakaKvalitetsvurdering(oppgave) &&
+      oppgave.kvalitetsvurderingReference.version === KvalitetsvurderingVersion.V3 &&
+      v3IsSuccess
+    ) {
+      return updateKvalitetsvurdering(getUpdate(kvalitetsvurderingHjemler));
+    }
+  };
 
   if (oppgave === undefined) {
     return null;
   }
 
-  if (oppgave.kvalitetsvurderingReference?.version === KvalitetsvurderingVersion.V3 && isLoading) {
+  if (hasHjemmelDependantKvalitetsvurdering && isLoading) {
     return <Skeleton width="100%" height="64px" variant="rounded" />;
   }
 
@@ -133,3 +199,27 @@ const getUpdate = (ids: string[]) => ({
 });
 
 const FTRL_4_7_FØRSTE_LEDD_PERMITTERINGSÅRSAK = '240';
+
+const getAnkeAfter2027Update = (
+  ids: string[],
+  omgjortIKlageomgangen: OmgjortIKlageomgangen,
+): Pick<KvalitetsvurderingDataAnkeAfter2027, AnkeAfter2027Section.OmgjortIKlageomgangen> => ({
+  omgjortIKlageomgangen: {
+    ...omgjortIKlageomgangen,
+    feilILovtolkningen: { ...omgjortIKlageomgangen.feilILovtolkningen, registreringshjemler: ids },
+    feilIFaktagrunnlaget: { ...omgjortIKlageomgangen.feilIFaktagrunnlaget, registreringshjemler: ids },
+    feilIRettsanvendelsen: { ...omgjortIKlageomgangen.feilIRettsanvendelsen, registreringshjemler: ids },
+  },
+});
+
+const getAnkeITRAfter2027Update = (
+  ids: string[],
+  omgjortIAnkeomgangen: OmgjortIAnkeomgangen,
+): Pick<KvalitetsvurderingDataAnkeITRAfter2027, AnkeITRAfter2027Section.OmgjortIAnkeomgangen> => ({
+  omgjortIAnkeomgangen: {
+    ...omgjortIAnkeomgangen,
+    feilILovtolkningen: { ...omgjortIAnkeomgangen.feilILovtolkningen, registreringshjemler: ids },
+    feilIFaktagrunnlaget: { ...omgjortIAnkeomgangen.feilIFaktagrunnlaget, registreringshjemler: ids },
+    feilIRettsanvendelsen: { ...omgjortIAnkeomgangen.feilIRettsanvendelsen, registreringshjemler: ids },
+  },
+});

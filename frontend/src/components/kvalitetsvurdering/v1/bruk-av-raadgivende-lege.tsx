@@ -5,8 +5,8 @@ import { useKvalitetsvurderingV1FieldName } from '@/components/kvalitetsvurderin
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { useKvalitetsvurderingV1 } from '@/hooks/use-kvalitetsvurdering';
 import { useValidationError } from '@/hooks/use-validation-error';
-import { useUpdateKvalitetsvurderingMutation } from '@/redux-api/kaka-kvalitetsvurdering/v1';
-import { RadiovalgExtended } from '@/types/kaka-kvalitetsvurdering/radio';
+import { useUpdateKvalitetsvurderingMutation } from '@/redux-api/kvalitetsvurdering/v1';
+import { RadiovalgExtended } from '@/types/kvalitetsvurdering/radio';
 
 export const BrukAvRaadgivendeLege = () => {
   const [kvalitetsvurdering, isLoading] = useKvalitetsvurderingV1();

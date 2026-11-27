@@ -17,8 +17,8 @@ import {
   SærregelverketSaksdataHjemlerList,
 } from '@/components/kvalitetsvurdering/v3/særregelverket/data';
 import { TrygdemedisinBoolean } from '@/components/kvalitetsvurdering/v3/trygdemedisin/data';
-import type { IKvalitetsvurderingBase } from '@/types/kaka-kvalitetsvurdering/common';
-import type { Radiovalg, RadiovalgExtended } from '@/types/kaka-kvalitetsvurdering/radio';
+import type { IKvalitetsvurderingBase } from '@/types/kvalitetsvurdering/common';
+import type { Radiovalg, RadiovalgExtended } from '@/types/kvalitetsvurdering/radio';
 
 // Kvalitetsavvik i forvaltningen av særregelverket
 interface Særregelverket extends LovenErTolketEllerAnvendtFeilIVedtaket {
