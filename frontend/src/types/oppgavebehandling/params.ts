@@ -164,3 +164,7 @@ export interface ISetRolParams extends IOppgavebehandlingBaseParams {
 export interface ISetInnsendingshjemlerParams extends IOppgavebehandlingBaseParams {
   hjemmelIdList: string[];
 }
+
+export interface ISaksnummerHosTrygderettenParams extends IOppgavebehandlingBaseParams {
+  trygderettenSaksnummer: string | null;
+}

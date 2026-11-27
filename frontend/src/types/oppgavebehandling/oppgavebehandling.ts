@@ -161,6 +161,7 @@ export interface ITrygderettsankebehandling extends IOppgavebehandlingBase {
   typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN;
   kjennelseMottatt: string | null; // LocalDate
   sendtTilTrygderetten: string | null; // LocalDate
+  trygderettenSaksnummer: string | null;
 }
 
 export interface IBehandlingEtterTryderettenOpphevet extends IOppgavebehandlingBase {
@@ -180,6 +181,7 @@ export interface IBegjæringOmGjenopptakITRBehandling extends IOppgavebehandling
   kjennelseMottatt: string | null; // LocalDate
   sendtTilTrygderetten: string | null; // LocalDate
   typeId: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
+  trygderettenSaksnummer: string | null;
 }
 
 export type IOppgavebehandling =

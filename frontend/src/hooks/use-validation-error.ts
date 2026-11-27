@@ -9,6 +9,7 @@ type Field =
   | keyof Pick<IOppgavebehandlingBase, 'mottattVedtaksinstans'>
   | keyof Pick<ITrygderettsankebehandling, 'kjennelseMottatt'>
   | keyof Pick<ITrygderettsankebehandling, 'sendtTilTrygderetten'>
+  | keyof Pick<ITrygderettsankebehandling, 'trygderettenSaksnummer'>
   | 'utfall'
   | 'hjemmel'
   | 'underArbeid'
