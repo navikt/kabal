@@ -77,10 +77,10 @@ export const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         finishOppgaveOnQueryStarted({ oppgaveId, kvalitetsvurderingId, queryFulfilled, dispatch }),
     }),
     finishOppgavebehandlingWithUpdateInGosys: builder.mutation<IVedtakFullfoertResponse, IFinishWithUpdateInGosys>({
-      query: ({ oppgaveId, gosysOppgaveUpdate, ignoreGosysOppgave }) => ({
+      query: ({ oppgaveId, gosysOppgaveUpdate, avsluttGosysOppgave, ignoreGosysOppgave }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/fullfoer?nybehandling=false`,
         method: 'POST',
-        body: { gosysOppgaveUpdate, ignoreGosysOppgave },
+        body: { gosysOppgaveUpdate, avsluttGosysOppgave, ignoreGosysOppgave },
       }),
       extraOptions: { maxRetries: 0 },
       onQueryStarted: ({ oppgaveId, kvalitetsvurderingId }, { queryFulfilled, dispatch }) =>

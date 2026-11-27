@@ -11,6 +11,7 @@ import { Beskrivelse, getInitialBeskrivelse } from '@/components/oppgavebehandli
 import { Enhetmappe } from '@/components/oppgavebehandling-footer/update-in-gosys/enhetmappe';
 import { GosysOppgave } from '@/components/oppgavebehandling-footer/update-in-gosys/gosys-oppgave';
 import { ReceivingEnhet } from '@/components/oppgavebehandling-footer/update-in-gosys/receiving-enhet';
+import { useIsAnkeOrGbWithUtfallToTr } from '@/components/oppgavebehandling-footer/update-in-gosys/use-is-anke-or-gb-with-utfall-to-tr';
 import { ValidationSummary } from '@/components/oppgavebehandling-footer/validation-summary';
 import { UtfallTag } from '@/components/utfall-tag/utfall-tag';
 import { isReduxValidationResponse } from '@/functions/error-type-guard';
@@ -71,20 +72,35 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
   const [isOpen, setIsOpen] = useState(false);
   const [enhetError, setEnhetError] = useState<string | null>(null);
   const [, { isLoading: isSettingGosysOppgave }] = useSetGosysOppgaveMutation({ fixedCacheKey: oppgavebehandling.id });
-  const { gosysOppgaveId } = oppgavebehandling;
+  const { gosysOppgaveId, typeId } = oppgavebehandling;
+  const isAnkeOrGbWithUtfallToTr = useIsAnkeOrGbWithUtfallToTr();
   const { data: gosysOppgave, isSuccess: hasGosysOppgave } = useGetGosysOppgaveQuery(
     gosysOppgaveId === null ? skipToken : oppgavebehandling.id,
   );
   const { validationSectionErrors, setValidationSectionErrors } = useContext(ValidationErrorContext);
+  const [avsluttGosysOppgaveState, setAvsluttGosysOppgaveState] = useState(false);
 
   const gosysOppgaveIsOpen = hasGosysOppgave && gosysOppgave.editable;
+  const showAvsluttGosysOppgave = typeId !== SaksTypeEnum.KLAGE && !isAnkeOrGbWithUtfallToTr;
+  const avsluttGosysOppgave = showAvsluttGosysOppgave && avsluttGosysOppgaveState;
 
   const handleFinish = async () => {
     try {
       const kvalitetsvurderingId = oppgavebehandling.kvalitetsvurderingReference?.id ?? null;
       const oppgaveId = oppgavebehandling.id;
 
-      if (gosysOppgaveIsOpen) {
+      const base = { kvalitetsvurderingId, oppgaveId };
+
+      if (avsluttGosysOppgave) {
+        setEnhetError(null);
+
+        await finish({
+          ...base,
+          gosysOppgaveUpdate: null,
+          ignoreGosysOppgave: false,
+          avsluttGosysOppgave: { kommentar: beskrivelse },
+        }).unwrap();
+      } else if (gosysOppgaveIsOpen) {
         if (selectedEnhet === null) {
           return setEnhetError('Du må velge en enhet');
         }
@@ -93,13 +109,18 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
 
         const gosysOppgaveUpdate = { kommentar: beskrivelse, tildeltEnhet: selectedEnhet, mappeId: selectedMappe };
 
-        await finish({ kvalitetsvurderingId, oppgaveId, gosysOppgaveUpdate, ignoreGosysOppgave }).unwrap();
+        await finish({ ...base, gosysOppgaveUpdate, ignoreGosysOppgave: false, avsluttGosysOppgave: null }).unwrap();
 
         setIsOpen(false);
       } else {
         setEnhetError(null);
 
-        await finish({ kvalitetsvurderingId, oppgaveId, gosysOppgaveUpdate: null, ignoreGosysOppgave }).unwrap();
+        await finish({
+          ...base,
+          gosysOppgaveUpdate: null,
+          ignoreGosysOppgave: true,
+          avsluttGosysOppgave: null,
+        }).unwrap();
       }
     } catch (e) {
       if (isReduxValidationResponse(e)) {
@@ -129,7 +150,7 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
               </GrafanaDomainProvider>
 
               {gosysOppgaveIsOpen ? (
-                <VStack gap="space-12" width="min-content">
+                <VStack gap="space-12">
                   <UpdateInGosysWarning oppgavebehandling={oppgavebehandling} />
 
                   <Beskrivelse beskrivelse={beskrivelse} setBeskrivelse={setBeskrivelse} />
@@ -140,26 +161,41 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
                     </b>
                   </BodyShort>
 
-                  <ReceivingEnhet
-                    selectedEnhet={selectedEnhet}
-                    setSelectedEnhet={(e) => {
-                      if (e === selectedEnhet) {
-                        return;
-                      }
+                  {showAvsluttGosysOppgave ? (
+                    <Checkbox
+                      checked={avsluttGosysOppgaveState}
+                      onChange={({ target }) => setAvsluttGosysOppgaveState(target.checked)}
+                      size="small"
+                      description="Hvis vedtaksinstansen ikke trenger informasjon om utfallet, kan du avslutte Gosys-oppgaven her uten å velge en enhet som skal motta oppgaven."
+                    >
+                      Avslutt oppgaven i Gosys
+                    </Checkbox>
+                  ) : null}
 
-                      setSelectedEnhet(e);
-                      setSelectedMappe(null);
-                    }}
-                    error={enhetError}
-                    enheter={enheter}
-                    oppgavebehandling={oppgavebehandling}
-                  />
+                  {avsluttGosysOppgave ? null : (
+                    <>
+                      <ReceivingEnhet
+                        selectedEnhet={selectedEnhet}
+                        setSelectedEnhet={(e) => {
+                          if (e === selectedEnhet) {
+                            return;
+                          }
 
-                  <Enhetmappe
-                    enhetId={selectedEnhet}
-                    selectedMappe={selectedMappe}
-                    setSelectedMappe={setSelectedMappe}
-                  />
+                          setSelectedEnhet(e);
+                          setSelectedMappe(null);
+                        }}
+                        error={enhetError}
+                        enheter={enheter}
+                        oppgavebehandling={oppgavebehandling}
+                      />
+
+                      <Enhetmappe
+                        enhetId={selectedEnhet}
+                        selectedMappe={selectedMappe}
+                        setSelectedMappe={setSelectedMappe}
+                      />
+                    </>
+                  )}
                 </VStack>
               ) : (
                 <ConfirmIgnoreOrRequiredWarning
@@ -180,7 +216,7 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
               onClick={handleFinish}
               loading={isFinishing || isSettingGosysOppgave}
             >
-              Oppdater og fullfør
+              {avsluttGosysOppgave ? 'Fullfør' : 'Oppdater og fullfør'}
             </Button>
             <Button
               data-color="neutral"

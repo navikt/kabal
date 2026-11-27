@@ -91,14 +91,35 @@ export type IFinishOppgavebehandlingParams =
   | IFinishOppgavebehandlingOpphevetTRParams
   | IFinishOppgavebehandlingBegjæringOmGjenopptakITRParams;
 
-export interface IFinishWithUpdateInGosys extends Omit<IDefaultFinishOppgavebehandlingParams, 'nyBehandling'> {
+interface FinishWithUpdateInGosysBase extends Omit<IDefaultFinishOppgavebehandlingParams, 'nyBehandling'> {}
+export interface FinishWithUpdateInGosysIgnore extends FinishWithUpdateInGosysBase {
+  ignoreGosysOppgave: true;
+  gosysOppgaveUpdate: null;
+  avsluttGosysOppgave: null;
+}
+
+export interface FinishWithUpdateInGosysUpdate extends FinishWithUpdateInGosysBase {
+  ignoreGosysOppgave: false;
   gosysOppgaveUpdate: {
     tildeltEnhet: string;
     mappeId: number | null;
     kommentar: string;
-  } | null;
-  ignoreGosysOppgave: boolean;
+  };
+  avsluttGosysOppgave: null;
 }
+
+export interface FinishWithUpdateInGosysAvslutt extends FinishWithUpdateInGosysBase {
+  ignoreGosysOppgave: false;
+  gosysOppgaveUpdate: null;
+  avsluttGosysOppgave: {
+    kommentar: string;
+  };
+}
+
+export type IFinishWithUpdateInGosys =
+  | FinishWithUpdateInGosysIgnore
+  | FinishWithUpdateInGosysUpdate
+  | FinishWithUpdateInGosysAvslutt;
 
 interface IDefaultFinishOppgavebehandlingParams {
   oppgaveId: string;
